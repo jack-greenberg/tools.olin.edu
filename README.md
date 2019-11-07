@@ -18,21 +18,19 @@ A redesign and backend-restructuring of tools.olin.edu to include better usabili
 ## Timeline
 Phase|Time|Deliverables
 ---|---|---
-*User System, Database / UX/UI*|6 weeks|Database, user system with profiles/permissions, user stories, workflows, wireframes
+*User System, Database / UX/UI*|6 weeks|Database, user system with profiles/permissions, user stories, workflows, wireframes, user testing
 *Design / API*|4 weeks|Figma/Illustrator designs, API for site-server communication
 *Front-end / Back-end integration and deployment*|4 weeks|HTML, CSS, ReactJS, JavaScript for the site's front-end
 
 ## Phase 1: *User System, Database / UX/UI*
-This phase will include developing the user/permissions system so that we can create different user profiles that have different capabilities. For instance, we could have *shop staff*, *NINJAs*, *students*, and any other group we would need. Each of those profiles would have access to parts of the backend.
+This phase will include developing the user/permissions system so that we can create different user profiles that have different capabilities. For instance, we could have *shop staff*, *NINJAs*, *students*, and any other group we would need. Each of those profiles would have access to parts of the backend. This will also include the database set up, in which we will create profiles for tools and trainings.
 
-This will also include the database set up, in which we will create profiles for tools and trainings.
-
-On the front-end side, this will involve developing workflows, user stories, and basic wireframes. Workflows and user stories will help lay the path for site interaction modules, and may involve interviews or surveys of shop staff and NINJAs to see what the ideal workflow is for the site.
+On the front-end side, this will involve developing workflows, user stories, and basic wireframes. Workflows and user stories will help lay the path for site interaction modules. There will also be user testing in the form of interviews or surveys of shop staff and NINJAs to see what the ideal workflow is for the site.
 
 ## Phase 2: *Design / API*
 For the backend, this phase involves developing an API for the site to query data from the database. This includes data processing and appropriate JSON structure to ensure the easiest processing in the frontend. This will also involve the page router and development of any "helper modules" that will aid server management.
 
-For the frontend, this will include the development of Figma, Illustrator, or Figma designs. This will highlight the user-facing functionality of the site for each category of user. Either each page will be displayed, or a few example pages and a general set of design guidelines.
+For the frontend, this will include the development of Figma, Illustrator, or InDesign mockups. This will highlight the user-facing functionality of the site for each category of user. Either each page will be displayed, or a few example pages and a general set of design guidelines.
 
 ## Phase 3: *Front-end / Back-end integration and deployment*
 For the final phase, the frontend will be developed using HTML, CSS, and JavaScript. We will then integrate the front and backend by adding AJAX API queries to create the final product.
