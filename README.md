@@ -36,3 +36,19 @@ For the frontend, this will include the development of Figma, Illustrator, or In
 For the final phase, the frontend will be developed using HTML, CSS, and JavaScript. We will then integrate the front and backend by adding AJAX API queries to create the final product.
 
 Once that is done, we will deploy it to the server and set up the HTTP daemon that will handle all requests and direct them to our Python app file. This part will likely need to be coordinated with IT to ensure that everything is secured and the processes can run uninterrupted.
+
+
+
+---
+
+## 02/18 Design Review
+
+Design review took place with NINJAs and machine shop staff.
+
+* Would be nice to check off multiple people on a single page, like on the tools page
+* Use yellow color for incomplete
+* Automatically have a box for who did what (checking off) and when, but have the ability to change the values
+* If NINJA and trainee are not in the same place, the following should happen:
+  * After checking off the test piece, NINJA puts in their password, then the student can go to their page, check the disclaimer box, and enter their password to sign
+* Make it easy to change tools
+* If a student hasn't completed their testpiece at the end of a semester, the training should be unchecked
