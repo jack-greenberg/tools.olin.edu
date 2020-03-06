@@ -5,4 +5,4 @@ public = Blueprint('public', __name__, template_folder='../templates/public', st
 
 @public.route('/')
 def public_index():
-	return "Hello, world!"
+	return render_template('index.j2')
