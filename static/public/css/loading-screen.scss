@@ -1,0 +1,27 @@
+.loading-screen {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    // background-color: $canvas;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    text-align: center;
+
+    &__text {
+        font-family: $sans;
+        margin-bottom: 30vh;
+        width: 70%;
+    }
+    &__icon {
+        width: 3em;
+        height: 3em;
+        position: absolute;
+        top: calc(50% - 1.5em);
+        left: calc(50% - 1.5em);
+        // stroke: $gray;
+        stroke-width: 1;
+    }
+}

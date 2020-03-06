@@ -1,0 +1,52 @@
+// 404 //
+.error-page {
+    text-align: center;
+    // padding: 2em 1em;
+    margin: 4em auto;
+
+    @media only screen and (min-width: $medium) {
+        font-size: 1.25em;
+    }
+    &__title {
+        font-size: 1.5em;
+        font-family: $sans;
+        color: $black;
+        font-weight: 800;
+        margin-bottom: 2em;
+    }
+    &__link {
+        font-size: 1em;
+        font-family: $sans;
+        color: $black;
+        font-weight: 600;
+        margin-top: 2em;
+        display: block;
+    }
+    .periscope {
+        width: 80%;
+        display: block;
+        margin: 0 auto;
+    }
+
+    @keyframes look {
+        0% {
+            transform: translateX(10px);
+        }
+        30% {
+            transform: translateX(10px)
+        }
+        70% {
+            transform: translateX(-11px);
+        }
+        100% {
+            transform: translateX(-11px);
+        }
+    }
+    .pupil {
+        animation-name: look;
+        animation-direction: alternate;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+    }
+}

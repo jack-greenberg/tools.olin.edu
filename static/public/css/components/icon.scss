@@ -1,0 +1,10 @@
+.Icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+
+    &--large {
+        width: 2em;
+        height: 2em;
+    }
+}

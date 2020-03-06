@@ -1,0 +1,15 @@
+.Label {
+    box-shadow: 0 0 0 1px $gray;
+    color: $gray;
+    text-transform: capitalize;
+    padding: 0 .2em;
+
+    &::before {
+        content: "";
+        display: inline-block;
+    }
+    &--green {
+        box-shadow: 0 0 0 1px $green;
+        color: $green;
+    }
+}

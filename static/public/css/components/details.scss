@@ -1,0 +1,50 @@
+.Details {
+    // padding: 0 8px;
+
+    &[open] {
+        // box-shadow: $shadow-border;
+    }
+    &__summary {
+        position: relative;
+        cursor: pointer;
+        font-weight: 700;
+        margin-bottom: 8px;
+        user-select: none;
+        // text-align: center;
+        // text-decoration: underline
+
+        //! Remove details marker, to be replaced with ::before
+        // list-style: none;
+        // &::-webkit-details-marker { display: none; }
+        // &::marker {
+        //     content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%0A%3E%3Cpolyline points='9 18 15 12 9 6' /%3E%3C/svg%3E%0A");
+        // }
+        // &::before {
+        //     content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='square' stroke-linejoin='round'%0A%3E%3Cpolyline points='9 18 15 12 9 6' /%3E%3C/svg%3E%0A");
+        //     height: 100%;
+        // }
+        &--nomarker {
+            list-style: none;
+
+            &::marker,
+            &::-webkit-details-marker {
+                display: none;
+            }
+        }
+        &--openonly {
+            display: none;
+        }
+        &__label:focus {
+            outline: none;
+        }
+    }
+    &[open] .Details__summary .Details__summary--openonly {
+        display: block;
+    }
+    &__content {
+        line-height: 1.5;
+        // box-shadow: $box-shadow;//$inner-shadow;
+        padding: 0 12px;
+        border-radius: 2px;
+    }
+}

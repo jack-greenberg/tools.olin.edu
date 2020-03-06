@@ -1,0 +1,37 @@
+/* VARIABLES
+------------
+* Sizes
+* Styles
+    * Shadows
+    * Stroke Widths
+    * Font Weights
+* ...
+*/
+
+//* 1. Sizes
+$small: 360px;
+$medium: 470px;
+$large: 630px;
+$x-large: 770px;
+$xx-large: 900px;
+$xxx-large: 960px;
+
+$nav-breakpoint: 660px;
+
+//* 2. Styles
+//* a. Shadows
+$box-shadow: 0px 2px 10px rgba(85, 85, 85, 0.25);
+$inner-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0.15);
+
+//* b. Stroke widths
+$icon-thin: 1;
+$icon-thick: 2;
+
+//* c. Font weights
+$font-light: 300;
+$font-regular: 400;
+$font-semibold: 600;
+$font-bold: 800;
+
+//* d. Borders
+$shadow-border: 0 0 0 1px $gray;

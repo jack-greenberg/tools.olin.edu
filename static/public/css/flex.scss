@@ -1,0 +1,18 @@
+[class*='flex'] {
+    display: flex;
+}
+.flex-justifyCenter {
+    justify-content: center;
+}
+.flex-justifyAround {
+    justify-content: space-around;
+}
+.flex-justifyBetween {
+    justify-content: space-between;
+}
+.flex-justifyEnd {
+    justify-content: flex-end;
+}
+.flex-alignCenter {
+    align-items: center;
+}
