@@ -11,13 +11,13 @@ module.exports =  {
         ],
     },
     output: {
-        filename: '[name].js',
-        path: path.resolve(__dirname, '[name]/build'),
+        filename: '[name]/build/[name].js',
+        path: path.resolve(__dirname),
     },
     watch: true,
     plugins: [
         new MiniCssExtractPlugin({
-            filename: "[name].css"
+            filename: "[name]/build/[name].css"
         }),
         new WebpackNotifierPlugin(),
     ],
