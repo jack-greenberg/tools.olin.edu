@@ -1,3 +1,27 @@
-<header>
-    <p class="h1">Tools.Olin</p>
+<header class="site-header">
+    <div class="site-header__title">
+        <a href="/"><p>Tools.Olin</p></a>
+    </div>
+    <nav class="site-header__nav">
+        {% if logged_in %}
+            <div class="profile">
+                
+            </div>
+        {% else %}
+            <a href="/login" class="button">Login</a>
+        {% endif %}
+
+        <div class="button--icon">
+            <label for="nav-trigger">
+                <!-- Menu icon - from feathericons.com -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            </label>
+            <input id="nav-trigger" type="checkbox" autocomplete="off" />
+        </div>
+        <ul class="site-header__nav__menu">
+            <li class="site-header__nav__menu">Trainings</li>
+            <li class="site-header__nav__menu">Tools</li>
+            <li class="site-header__nav__menu">Users</li>
+        </ul>
+    </nav>
 </header>
