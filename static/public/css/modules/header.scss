@@ -1,0 +1,35 @@
+// .site-header {
+//     position: relative;
+//     display: flex;
+//     justify-content: space-between;
+
+//     &__title {
+//         position: relative;
+
+//         font-size: 2em;
+//         font-family: $sans;
+//         font-style: italic;
+//         font-weight: bold;
+
+//         background-color: $black;
+//         color: $white;
+
+//         a {
+//             color: inherit;
+//             text-decoration: none;
+//         }
+//         p {
+//             font-style: inherit;
+//         }
+
+//         &::after {
+//             content: "";
+//             position: absolute;
+//             right: 0;
+//             width: 100px;
+//             height: 100%;
+//             background-color: #dd4f39;
+//             clip-path: polygon(0 0, 100% 0, 100% 100%);
+//         }
+//     }
+// }
