@@ -5,19 +5,18 @@ var WebpackNotifierPlugin = require('webpack-notifier');
 module.exports =  {
     mode: 'development',
     entry: {
-        public: [
-            './public/js/index.js',
-            'babel-polyfill',
+        build: [
+            './static/index.js',
         ],
     },
     output: {
-        filename: '[name]/build/[name].js',
-        path: path.resolve(__dirname),
+        filename: '[name].js',
+        path: path.resolve(__dirname, 'static'),
     },
     watch: true,
     plugins: [
         new MiniCssExtractPlugin({
-            filename: "[name]/build/[name].css"
+            filename: "[name].css"
         }),
         new WebpackNotifierPlugin(),
     ],
