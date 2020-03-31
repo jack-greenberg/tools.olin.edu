@@ -4,6 +4,7 @@ from flask_jwt_extended import fresh_jwt_required, jwt_required, create_access_t
 from werkzeug.security import check_password_hash, generate_password_hash, safe_str_cmp
 import bcrypt
 import json
+from modules.db import User, Tool, db
 
 def login_required(f):
     @wraps(f)
@@ -17,11 +18,11 @@ def login_required(f):
             return f(*args, **kwargs)
     return decorated_function
 
-public = Blueprint('public', __name__, template_folder='../templates/public', static_folder='../static/public', static_url_path='/static/public')
+public = Blueprint('public', __name__, template_folder='../templates/public', static_folder='../static/')
 
 @public.route('/')
 def index():
-	return render_template('index.j2')
+    return render_template('index.j2')
 
 @public.route('/users')
 def users():
@@ -34,11 +35,18 @@ def single_user(user):
 
 @public.route('/tools')
 def tools():
-    return render_template('tools.j2')
+    # fetch list of tools from database
+    #  tool_list = Tool.query.all()
+    tool_list = {"key": "value"}
+    return render_template('tools.j2', tool_list=tool_list)
 
 @public.route('/tools/<tool>')
 def single_tool(tool):
     return render_template('tool.j2', tool=tool)
+
+@public.route('/trainings')
+def trainings():
+    return render_template('trainings.j2')
 
 @public.route('/api/token-refresh/', methods=['POST']) # refresh the token
 @jwt_refresh_token_required # refresh token is needed to do this

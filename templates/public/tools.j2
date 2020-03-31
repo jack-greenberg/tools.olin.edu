@@ -1,6 +1,25 @@
 {% extends "base.j2" %}
 {% block page %}
-<div>
-    <h1>Tools</h1>
-</div>
+<main class="wrapper">
+    <h1 class="title">Tools</h1>
+
+	<div class="ToolCategory">
+		<h2 class="ToolCategory__title">Green Machines</h2>
+		<ul class="ToolCategory__list">
+			<li class="ToolCategory__tool"><a href="/tools/band-saw">Band Saw</a></li>
+			<li class="ToolCategory__tool"><a href="/tools/belt-sander">Belt Sander</a></li>
+			<li class="ToolCategory__tool"><a>Drill Press</a></li>
+		</ul>
+	</div>
+
+	<div class="ToolCategory">
+		<h2 class="ToolCategory__title">Metal Working</h2>
+		<ul class="ToolCategory__list">
+			<li class="ToolCategory__tool"><a>Mill</a></li>
+			<li class="ToolCategory__tool"><a>Lathe</a></li>
+			<li class="ToolCategory__tool"><a>MIG Welding</a></li>
+			<li class="ToolCategory__tool"><a>TIG Welding</a></li>
+		</ul>
+	</div>
+</main>
 {% endblock %}

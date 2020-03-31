@@ -1,27 +1,30 @@
-<header class="site-header">
-    <div class="site-header__title">
-        <a href="/"><p>Tools.Olin</p></a>
+<header class="Header">
+    <div class="Header__title">
+        <p><a href="/">Tools.Olin</a></p>
     </div>
-    <nav class="site-header__nav">
-        {% if logged_in %}
-            <div class="profile">
-                
-            </div>
-        {% else %}
-            <a href="/login" class="button">Login</a>
-        {% endif %}
+    
+    <div class="Nav-trigger">
+        <input id="Nav-trigger" type="checkbox" autocomplete="off" />
+        <label for="Nav-trigger" class="Nav-trigger__icon">
+            <!-- Menu icon - from feathericons.com -->
+            <svg class="icon--menu" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <svg class="icon--x" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+        </label>
+        <label for="Nav-trigger" class="Nav-trigger__overlay"></label>
 
-        <div class="button--icon">
-            <label for="nav-trigger">
-                <!-- Menu icon - from feathericons.com -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-            </label>
-            <input id="nav-trigger" type="checkbox" autocomplete="off" />
-        </div>
-        <ul class="site-header__nav__menu">
-            <li class="site-header__nav__menu">Trainings</li>
-            <li class="site-header__nav__menu">Tools</li>
-            <li class="site-header__nav__menu">Users</li>
-        </ul>
-    </nav>
+        <nav class="Nav">
+            <div class="Profile">
+            {% if logged_in %}
+                <!-- Show profile -->
+            {% else %}
+                <a href="/login" class="Profile__login">Login</a>
+            {% endif %}
+            </div>
+            <ul class="Nav__menu">
+                <li class="Nav__menu__item"><a href="/trainings">Trainings</a></li>
+                <li class="Nav__menu__item"><a href="/tools">Tools</a></li>
+                <li class="Nav__menu__item"><a href="/users">Users</a></li>
+            </ul>
+        </nav>
+    </div>
 </header>
