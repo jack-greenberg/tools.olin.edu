@@ -28,20 +28,26 @@ def index():
 def users():
     return render_template('users.j2')
 
-@public.route('/users/<user>')
-# @login_required
-def single_user(user):
+@public.route('/users/<u>')
+def single_user(u):
+    user = User.query.filter_by(username=u).first_or_404()
     return render_template('user.j2', user=user)
 
 @public.route('/tools')
 def tools():
     # fetch list of tools from database
-    #  tool_list = Tool.query.all()
-    tool_list = {"key": "value"}
-    return render_template('tools.j2', tool_list=tool_list)
+    tool_object = {}
+    tool_list = Tool.query.all()
+    for tool in tool_list:
+        try:
+            tool_object[tool.category.name].append(tool)
+        except KeyError:
+            tool_object[tool.category.name] = [tool]
+    return render_template('tools.j2', tool_object=tool_object)
 
 @public.route('/tools/<tool>')
 def single_tool(tool):
+    tool = Tool.query.filter_by(shortname=tool).first_or_404()
     return render_template('tool.j2', tool=tool)
 
 @public.route('/trainings')

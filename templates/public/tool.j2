@@ -1,6 +1,13 @@
 {% extends "base.j2" %}
 {% block page %}
-<div>
-    <h1>{{ tool }}</h1>
-</div>
+<main>
+    <header>
+        <h1 class="title">{{ tool.name }}</h1>
+    </header>
+    <div>
+        <a href="/trainings/{{ tool.shortname }}">Begin Training</a>
+        <!-- <a href="/trainings/{{ tool.shortname }}">Continue Training</a> -->
+        <!-- <p>You're already trained!</p> -->
+    </div>
+</main>
 {% endblock %}

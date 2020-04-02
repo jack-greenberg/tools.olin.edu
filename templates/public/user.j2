@@ -1,6 +1,12 @@
 {% extends "base.j2" %}
 {% block page %}
 <div>
-    <h1>{{ user }}</h1>
+    <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+    <span class="Tag">{{ user.role.role_name }}</span>
+
+    <h2>Your Trainings</h2>
+    {% for tool in user.tools_trained %}
+        {{ tool.name }}<br />
+    {% endfor %}
 </div>
 {% endblock %}

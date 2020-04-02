@@ -14,10 +14,10 @@
 
         <nav class="Nav">
             <div class="Profile">
-            {% if logged_in %}
-                <!-- Show profile -->
+            {% if logged_in or 1 %}
+                <a href="/profile" class="Profile__link">View profile</a>
             {% else %}
-                <a href="/login" class="Profile__login">Login</a>
+                <a href="/login" class="Profile__link">Login</a>
             {% endif %}
             </div>
             <ul class="Nav__menu">

@@ -1,25 +1,21 @@
 {% extends "base.j2" %}
 {% block page %}
 <main class="wrapper">
-    <h1 class="title">Tools</h1>
+	<h1 class="title">Tools</h1>
+	
+	{% for tool in tool_list %}
+		{{ tool.name }}
+	{% endfor %}
 
-	<div class="ToolCategory">
-		<h2 class="ToolCategory__title">Green Machines</h2>
-		<ul class="ToolCategory__list">
-			<li class="ToolCategory__tool"><a href="/tools/band-saw">Band Saw</a></li>
-			<li class="ToolCategory__tool"><a href="/tools/belt-sander">Belt Sander</a></li>
-			<li class="ToolCategory__tool"><a>Drill Press</a></li>
-		</ul>
-	</div>
-
-	<div class="ToolCategory">
-		<h2 class="ToolCategory__title">Metal Working</h2>
-		<ul class="ToolCategory__list">
-			<li class="ToolCategory__tool"><a>Mill</a></li>
-			<li class="ToolCategory__tool"><a>Lathe</a></li>
-			<li class="ToolCategory__tool"><a>MIG Welding</a></li>
-			<li class="ToolCategory__tool"><a>TIG Welding</a></li>
-		</ul>
-	</div>
+	{% for tool_category in tool_object %}
+		<div class="ToolCategory">
+			<h2 class="ToolCategory__title">{{ tool_category }}</h2>
+			<ul class="ToolCategory__list">
+				{% for tool in tool_object[tool_category] %}
+				<li class="ToolCategory__tool"><a href="/tools/{{ tool.shortname }}">{{ tool.name }}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+	{% endfor %}
 </main>
 {% endblock %}

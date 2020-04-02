@@ -6,7 +6,7 @@ def create_app(config):
     app = Flask(__name__)
     app.config.from_object(config)
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://jackg:eminem answered primarily charity@10.0.1.11:3306/tools"
+    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://jackg:eminem answered primarily charity@192.168.86.75:3306/tools"
     #  app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://tools.olin:Pursuit harvard pepper3;:jgreenberg-dev.olin.edu:3306"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
