@@ -22,6 +22,7 @@
             z-index: 99;
     
             &::after {
+                // The 20 degree angle for the logo/header
                 content: "";
                 position: absolute;
                 top: 0;
@@ -140,25 +141,21 @@
     }
 }
 
-
 .title {
     font-size: 2rem;
     font-family: 'din-2014';
     font-style: italic;
     font-weight: bold;
     margin-bottom: .5em;
-}
-
-.wrapper {
+    margin: .5em 0 .25em .25em;
     text-align: center;
-    padding: 1em;
 }
 
-// /TOOLS
-
+// TOOLS
 .ToolCategory {
     font-family: 'din-2014';
     margin: 0 auto 2em;
+    text-align: center;
 
     &__title {
         font-size: 1.5em;

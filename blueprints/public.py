@@ -54,6 +54,10 @@ def single_tool(tool):
 def trainings():
     return render_template('trainings.j2')
 
+@public.route('/trainings/<tool>')
+def training(tool):
+    return render_template('training.j2', tool=tool)
+
 @public.route('/api/token-refresh/', methods=['POST']) # refresh the token
 @jwt_refresh_token_required # refresh token is needed to do this
 def refresh():
