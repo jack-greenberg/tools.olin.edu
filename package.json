@@ -16,7 +16,10 @@
     "url": "https://github.com/jack-Greenberg/tools.olin.edu/issues"
   },
   "homepage": "https://github.com/jack-Greenberg/tools.olin.edu#readme",
-  "dependencies": {},
+  "dependencies": {
+    "react-router": "^5.1.2",
+    "redux": "^4.0.5"
+  },
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
