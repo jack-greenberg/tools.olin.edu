@@ -1,10 +1,14 @@
-// Import Styles
-import './index.scss';
+// Import styles so webpack will compile them into build.css
+import "./index.scss";
 
 // Import React stuff
-import React from 'react-js';
-import ReactDOM from 'react-dom';
-import { Provider, connect } from 'react-redux';
+import React from "react";
+import ReactDOM from "react-dom";
+
+// App
+import Training from './training'
+
+import client from './api';
 import { ErrorBoundary } from './errorboundary';
 
 export const AppContext = React.createContext({});
@@ -14,11 +18,10 @@ class App extends React.Component {
         super(props);
     }
     render() {
-        return (
-            <AppContext.Provider value={this.state.data}>
-                <Router />
-            </AppContext.Provider>
-        );
+        var tool = window.location.pathname.split('/');
+        tool = tool[tool.length - 1];
+
+        return <Training tool={tool} />;
     };
 };
 
@@ -28,4 +31,4 @@ var renderedApp = (
     </ErrorBoundary>
 );
 
-ReactDOM.render(renderedApp, document.getElementById("root"));
+ReactDOM.render(renderedApp, document.getElementById('root'));

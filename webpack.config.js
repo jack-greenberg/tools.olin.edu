@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 var WebpackNotifierPlugin = require('webpack-notifier');
 
@@ -7,6 +8,7 @@ module.exports =  {
     entry: {
         build: [
             './static/index.js',
+            'babel-polyfill',
         ],
     },
     output: {
@@ -32,7 +34,7 @@ module.exports =  {
                 ]
             },
             {
-                test: /\.js$/,
+                test: /\.jsx?$/,
                 exclude: /node_modules/,
                 use: {
                     loader: "babel-loader"
