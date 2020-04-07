@@ -46,4 +46,8 @@ class TrainingAPI(MethodView):
     def delete(self, tool, user):
         pass
 
+class LogAPI(MethodView):
+    decorators = [fresh_jwt_required]
+    pass
+
 register_api(api, TrainingAPI, 'site_api', '/siteData/', pk='tool', pk_type='string')
