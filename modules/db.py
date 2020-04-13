@@ -62,12 +62,12 @@ class Training(db.Model):
     worksheet_complete = db.Column(db.Boolean)
     training_complete = db.Column(db.Boolean)
     testpiece_complete = db.Column(db.Boolean)
-    logs = db.relationship("Log", backref="training")
+    #  logs = db.relationship("Log", backref="training", lazy=True)
 
-class Log(db.Model):
-    __tablename__ = "log"
-    id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.DateTime)
-    training_id = db.Column(db.Integer, db.ForeignKey('training.id'))
-    training = db.relationship("Training")
-    text = db.Column(db.String(1023))
+#  class Log(db.Model):
+    #  __tablename__ = "log"
+    #  id = db.Column(db.Integer, primary_key=True)
+    #  timestamp = db.Column(db.DateTime)
+    #  training_id = db.Column(db.Integer, db.ForeignKey('training.id'))
+    #  training = db.relationship("Training")
+    #  text = db.Column(db.String(1023))

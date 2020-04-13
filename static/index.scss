@@ -186,3 +186,33 @@
         }
     }
 }
+
+// Training
+.Checklist {
+    padding: .5em;
+
+    &__title {
+        font-size: 2em;
+        font-family: 'din-2014';
+        font-style: italic;
+    }
+    &__item {
+        font-size: 1.25em;
+        font-family: 'din-2014';
+        font-style: italic;
+
+        &__checkbox {
+
+            &:disabled + .Checklist__item__label {
+                color: #999;
+            }
+        }
+        &__label {
+
+            a {
+                color: inherit;
+            }
+        }
+    }
+    
+}
