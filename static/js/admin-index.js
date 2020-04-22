@@ -18,11 +18,20 @@ class App extends React.Component {
             tools: <Tools />,
             users: <Users />
         }
+
+        this.switchTab = this.switchTab.bind(this);
     }
+
+    switchTab(tab) {
+        this.setState({
+            tab: tab,
+        })
+    }
+
     render() {
         return (
             <>
-                <Nav />
+                <Nav switchTab={this.switchTab} />
                 <main>
                     {this.tab[this.state.tab]}
                 </main>
@@ -34,15 +43,21 @@ class App extends React.Component {
 class Nav extends React.Component {
     constructor(props) {
         super(props);
+
+        this.changeTab = this.changeTab.bind(this);
+    }
+
+    changeTab(tab) {
+        this.props.switchTab(tab)
     }
 
     render() {
         return (
             <nav>
                 <ul>
-                    <li><a>Administration</a></li>
-                    <li><a>Tools</a></li>
-                    <li><a>Users</a></li>
+                    <li><a href="#" onClick={() => this.changeTab('administration')}>Administration</a></li>
+                    <li><a href="#" onClick={() => this.changeTab('tools')}>Tools</a></li>
+                    <li><a href="#" onClick={() => this.changeTab('users')}>Users</a></li>
                 </ul>
             </nav>
         )
