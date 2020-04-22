@@ -4,7 +4,7 @@
   "description": "A website for Olin's machine shop to manage trainings.",
   "main": "index.js",
   "scripts": {
-    "serve": "concurrently \"webpack -p --progress --mode=development --config webpack.config.js --watch\" \"FLASK_ENV=development flask run\""
+    "serve": "concurrently \"webpack -p --progress --mode=development --display-error-details --config webpack.config.js --watch\" \"FLASK_ENV=development flask run\""
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,15 @@
     "url": "https://github.com/jack-Greenberg/tools.olin.edu/issues"
   },
   "homepage": "https://github.com/jack-Greenberg/tools.olin.edu#readme",
-  "dependencies": {},
+  "dependencies": {
+    "@babel/preset-react": "^7.9.4",
+    "axios": "^0.19.2",
+    "babel-polyfill": "^6.26.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router": "^5.1.2",
+    "redux": "^4.0.5"
+  },
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.0",

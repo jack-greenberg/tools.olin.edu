@@ -49,3 +49,25 @@ class ToolCategory(db.Model):
     __tablename__ = "tool-category"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
+
+class Training(db.Model):
+    __tablename__ = "trainings"
+    id = db.Column(db.Integer, primary_key=True)
+    tool_id = db.Column(db.Integer, db.ForeignKey('tools.id'))
+    tool = db.relationship('Tool')
+    trainee_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    trainee = db.relationship('User')
+    started = db.Column(db.DateTime)
+    reading_complete = db.Column(db.Boolean)
+    worksheet_complete = db.Column(db.Boolean)
+    training_complete = db.Column(db.Boolean)
+    testpiece_complete = db.Column(db.Boolean)
+    #  logs = db.relationship("Log", backref="training", lazy=True)
+
+#  class Log(db.Model):
+    #  __tablename__ = "log"
+    #  id = db.Column(db.Integer, primary_key=True)
+    #  timestamp = db.Column(db.DateTime)
+    #  training_id = db.Column(db.Integer, db.ForeignKey('training.id'))
+    #  training = db.relationship("Training")
+    #  text = db.Column(db.String(1023))

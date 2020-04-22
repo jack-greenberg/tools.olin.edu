@@ -2,10 +2,14 @@
 {% block page %}
 <main>
 	<h1 class="title">Tools</h1>
-	
+
 	{% for tool in tool_list %}
 		{{ tool.name }}
 	{% endfor %}
+
+	{% block admin %}
+
+	{% endblock %}
 
 	{% for tool_category in tool_object %}
 		<div class="ToolCategory">
