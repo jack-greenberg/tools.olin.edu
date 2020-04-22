@@ -18,11 +18,11 @@ def login_required(f):
             return f(*args, **kwargs)
     return decorated_function
 
-public = Blueprint('public', __name__, template_folder='../templates/public', static_folder='../static/')
+public = Blueprint('public', __name__, template_folder='../templates/public', static_folder='../static/build/')
 
 @public.route('/')
 def index():
-    return render_template('index.j2')
+    return redirect(url_for('public.tools'))
 
 @public.route('/users')
 def users():

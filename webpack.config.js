@@ -6,14 +6,12 @@ var WebpackNotifierPlugin = require('webpack-notifier');
 module.exports =  {
     mode: 'development',
     entry: {
-        build: [
-            './static/index.js',
-            'babel-polyfill',
-        ],
+        training: './static/js/index.js',
+        admin: './static/js/admin-index.js',
     },
     output: {
         filename: '[name].js',
-        path: path.resolve(__dirname, 'static'),
+        path: path.resolve(__dirname, 'static/build'),
     },
     watch: true,
     plugins: [

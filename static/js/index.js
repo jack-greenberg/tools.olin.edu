@@ -1,5 +1,5 @@
 // Import styles so webpack will compile them into build.css
-import "./index.scss";
+import "../css/index.scss";
 
 // Import React stuff
 import React from "react";

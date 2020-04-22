@@ -4,7 +4,7 @@
   "description": "A website for Olin's machine shop to manage trainings.",
   "main": "index.js",
   "scripts": {
-    "serve": "concurrently \"webpack -p --progress --mode=development --config webpack.config.js --watch\" \"FLASK_ENV=development flask run\""
+    "serve": "concurrently \"webpack -p --progress --mode=development --display-error-details --config webpack.config.js --watch\" \"FLASK_ENV=development flask run\""
   },
   "repository": {
     "type": "git",
