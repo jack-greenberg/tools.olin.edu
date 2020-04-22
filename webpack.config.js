@@ -7,7 +7,7 @@ module.exports =  {
     mode: 'development',
     entry: {
         training: './static/js/index.js',
-        admin: './static/js/admin-index.js',
+        admin: './static/js/admin.js',
     },
     output: {
         filename: '[name].js',

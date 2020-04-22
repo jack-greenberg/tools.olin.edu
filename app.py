@@ -3,6 +3,7 @@ from config import DevelopmentConfig, ProductionConfig
 from modules.db import db
 from blueprints.public import public
 from blueprints.admin import admin
+from blueprints.api import api
 
 def create_app(config):
     app = Flask(__name__)
@@ -21,6 +22,7 @@ def create_app(config):
     # Set up blueprints
     app.register_blueprint(public)
     app.register_blueprint(admin)
+    app.register_blueprint(api)
 
     return app
 

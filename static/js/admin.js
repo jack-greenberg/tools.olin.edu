@@ -86,8 +86,59 @@ class Tools extends React.Component {
     render() {
         return (
             <>
-                Tools Section
+                ADD FORM
+                <ToolForm />
             </>
+        )
+    }
+}
+
+class ToolForm extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.handleSubmit = this.handleSubmit.bind(this);
+
+        this.categories = ['Green Machines', 'Metal Working']; // TODO: Fill this in as a prop from site data from database
+    }
+
+    handleSubmit() {
+        var formElement = document.getElementById('toolForm');
+        var form = new FormData(formElement);
+
+        client.post('/api/tools/', form)
+        .then(res => {
+            console.log(res)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+
+    render() {
+        const categoryOptions = this.categories.map(category => <option value={category}>{category}</option>);
+        return (
+            <form id="toolForm" enctype="multipart/form-data" method="post">
+                <label for="name">
+                    Name
+                    <input required type="text" name="name" id="name" />
+                </label>
+
+                <label for="shortname">
+                    Short Name
+                    <input required type="text" name="shortname" id="shortname" />
+                </label>
+
+                <label for="category">
+                    Category
+                    <select required name="category" id="category">
+                        <option value="NULL">Select one</option>
+                        {categoryOptions}
+                    </select>
+                </label>
+
+                <button type="button" onClick={() => this.handleSubmit()}>Submit</button>
+            </form>
         )
     }
 }

@@ -49,6 +49,7 @@ class ToolCategory(db.Model):
     __tablename__ = "tool-category"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
+    tools = db.relationship('Tool', backref='tool-category', lazy='dynamic')
 
 class Training(db.Model):
     __tablename__ = "trainings"
