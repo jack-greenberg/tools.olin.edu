@@ -1,5 +1,6 @@
 @import 'vars';
 @import 'reset';
+@import 'admin';
 @import url("https://use.typekit.net/onn4bjp.css");
 
 // GENERAL
@@ -20,7 +21,7 @@
             padding: 0 0 0 .5em;
             position: relative;
             z-index: 99;
-    
+
             &::after {
                 // The 20 degree angle for the logo/header
                 content: "";
@@ -33,7 +34,7 @@
                 transform: skew(-20deg);
                 z-index: -1;
             }
-    
+
             a {
                 color: inherit;
                 text-decoration: none;
@@ -214,5 +215,5 @@
             }
         }
     }
-    
+
 }

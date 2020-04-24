@@ -53,7 +53,19 @@ class LogAPI(MethodView):
 class ToolAPI(MethodView):
     def get(self, tool):
         if tool == None:
-            tool_list = Tool.query.all()
+            query = Tool.query.all()
+            tool_list = [
+                {
+                    'id': tool.id,
+                    'name': tool.name,
+                    'category': {
+                        'id': tool.category.id,
+                        'name': tool.category.name,
+                    },
+                    'shortname': tool.shortname
+                }
+            for tool in query]
+
             return jsonify(tool_list)
         else:
             _tool = Tool.query.filter_by(shortname=tool).first_or_404()
