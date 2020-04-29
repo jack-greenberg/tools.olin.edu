@@ -28,6 +28,17 @@ class Tool(db.Model):
     def __repr__(self):
         return '<Tool %r>' % self.name
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'category': {
+                'id': self.category.id,
+                'name': self.category.name,
+            },
+            'shortname': self.shortname
+        }
+
 class User(UserMixin, db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
@@ -42,6 +53,14 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "username": self.username,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+        }
 
 class Role(db.Model):
     __tablename__ = "roles"
@@ -71,7 +90,18 @@ class Training(db.Model):
     worksheet_complete = db.Column(db.Boolean)
     training_complete = db.Column(db.Boolean)
     testpiece_complete = db.Column(db.Boolean)
-    #  logs = db.relationship("Log", backref="training", lazy=True)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'tool': self.tool.to_dict(),
+            'trainee': self.trainee.to_dict(),
+            'started': self.started,
+            'reading_complete': self.reading_complete,
+            'worksheet_complete': self.worksheet_complete,
+            'training_complete': self.training_complete,
+            'testpiece_complete': self.testpiece_complete,
+        }
 
 #  class Log(db.Model):
     #  __tablename__ = "log"

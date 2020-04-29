@@ -8,30 +8,31 @@ export default class Training extends React.Component {
 
         this.state = {
             data: null,
-            // ready: false,
             permissions: 'student',
-            ready: true,
-            404: false
+            ready: false,
         }
+
+        this.training_id = window.location.pathname.split('/').pop();
     }
 
-    // componentDidMount() {
-    //     client.get('/api/trainings/' + this.tool)
-    //     .then(res => {
-    //         console.log(res)
-    //         this.setState({
-    //             data: res.data,
-    //             ready: true,
-    //         })
-    //     })
-    //     .catch(err => {
-    //         console.log(err);
-    //         this.setState({
-    //             404: true,
-    //             ready: true,
-    //         })
-    //     })
-    // }
+    componentDidMount() {
+        client.get('/api/trainings/' + this.training_id)
+        .then(res => {
+            console.log(res)
+            this.setState({
+                data: res.data,
+                trainee: res.data.trainee,
+                tool: res.data.tool,
+                ready: true,
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            this.setState({
+                ready: true,
+            })
+        })
+    }
 
     render() {
         if (!this.state.ready) {
@@ -40,12 +41,10 @@ export default class Training extends React.Component {
                     Loading your information...
                 </div>
             )
-        } else if (this.state[404]) {
-            window.location.replace("https://http.cat/404");
         } else {
             return (
                 <main>
-                    <h1>{"<Tool>"} Training</h1>
+                    <h1>{this.state.tool.name} Training</h1>
                     <section className="Checklist">
                         <Checklist permissions={this.state.permissions} />
                     </section>

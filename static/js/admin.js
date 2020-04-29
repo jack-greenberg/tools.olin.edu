@@ -17,8 +17,8 @@ class App extends React.Component {
         }
 
         this.tab = {
-            administration: <Administration />,
             tools: <Tools />,
+            administration: <Administration />,
             users: <Users />
         }
 
@@ -58,8 +58,8 @@ class Nav extends React.Component {
         return (
             <nav class="AdminNav">
                 <ul>
-                    <li className={"AdminNav__tab  " + (this.props.tab == 'administration' ? 'AdminNav__tab--current' : '')}><a href="#" onClick={() => this.changeTab('administration')}>Administration</a></li>
                     <li className={"AdminNav__tab  " + (this.props.tab == 'tools' ? 'AdminNav__tab--current' : '')}><a href="#" onClick={() => this.changeTab('tools')}>Tools</a></li>
+                    <li className={"AdminNav__tab  " + (this.props.tab == 'administration' ? 'AdminNav__tab--current' : '')}><a href="#" onClick={() => this.changeTab('administration')}>Administration</a></li>
                     <li className={"AdminNav__tab  " + (this.props.tab == 'users' ? 'AdminNav__tab--current' : '')}><a href="#" onClick={() => this.changeTab('users')}>Users</a></li>
                 </ul>
             </nav>

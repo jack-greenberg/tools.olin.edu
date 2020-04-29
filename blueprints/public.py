@@ -4,9 +4,9 @@ from flask_jwt_extended import fresh_jwt_required, jwt_required, create_access_t
 from werkzeug.security import check_password_hash, generate_password_hash, safe_str_cmp
 import bcrypt
 import json
-from modules.db import User, Tool, db
-from modules.forms import LoginForm
-from authlib.flask.client import OAuth
+from modules.db import User, Tool, db, Training
+from modules.forms import LoginForm, NewTrainingForm
+from authlib.integrations.flask_client import OAuth
 from flask_login import current_user, login_user, logout_user
 # from adal import AuthenticationContext
 
@@ -58,9 +58,31 @@ def single_tool(tool):
 def trainings():
     return render_template('trainings.j2')
 
-@public.route('/trainings/<tool>')
-def training(tool):
-    return render_template('training.j2', tool=tool)
+@public.route('/trainings/new', methods=['GET', 'POST'])
+def new_training():
+    form = NewTrainingForm()
+    form.tool.choices = [(tool.shortname, tool.name) for tool in Tool.query.all()]
+
+    if request.method == 'POST':
+        _tool = Tool.query.filter_by(shortname=form.tool.data).first()
+
+        # TODO: Add user
+        _user = User.query.filter_by(username="folin").first()
+        training = Training(tool=_tool, trainee=_user, started=db.func.current_timestamp())
+        db.session.add(training)
+        db.session.flush()
+        db.session.commit()
+
+        training_id = training.id
+        return redirect(url_for('public.training', training_id=training_id))
+
+
+    return render_template('training_new.j2', form=form)
+
+@public.route('/trainings/<training_id>')
+def training(training_id):
+    training = Training.query.filter_by(id=training_id).first_or_404()
+    return render_template('training.j2', training=training)
 
 @public.route('/api/token-refresh/', methods=['POST']) # refresh the token
 @jwt_refresh_token_required # refresh token is needed to do this

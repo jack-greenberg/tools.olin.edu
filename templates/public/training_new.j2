@@ -1,0 +1,13 @@
+{% extends "base.j2" %}
+{% block page %}
+    <h1>Start a new training!</h1>
+
+    <form enctype="multipart/form-data" method="post">
+        <!-- <input type="hidden" value="" /> -->
+
+        {{ form.tool }}
+
+        {{ form.submit }}
+    </form>
+
+{% endblock %}
