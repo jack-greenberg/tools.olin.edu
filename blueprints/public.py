@@ -56,7 +56,9 @@ def single_tool(tool):
 
 @public.route('/trainings')
 def trainings():
-    return render_template('trainings.j2')
+    user = User.query.filter_by(username='folin').first()
+    trainings = Training.query.filter_by(trainee=user).all()
+    return render_template('trainings.j2', trainings=trainings)
 
 @public.route('/trainings/new', methods=['GET', 'POST'])
 def new_training():

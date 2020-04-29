@@ -2,12 +2,8 @@
 {% block page %}
     <a href="/trainings/new/">New Training</a>
 
-    <!-- <input id="NewTrainingButton" type="checkbox" autocomplete="off" /> -->
-    <!-- <label for="NewTrainingButton" class="NewTrainingButton__label"> -->
-        <!-- New Training -->
-    <!-- </label> -->
-    <!-- <label for="NewTrainingButton" class="NewTrainingButton__overlay"></label> -->
-<!-- List of trainings you have started -->
-<!-- List of trainings you could start -->
-<!-- List of trainings you have completed -->
+    {% for training in trainings %}
+        {{ training.tool.name }}
+        <a href="/trainings/{{training.id}}">View Training</a>
+    {% endfor %}
 {% endblock %}

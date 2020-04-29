@@ -75,19 +75,15 @@ class Checklist extends React.Component {
 
         switch(e.target.name) {
             case 'reading':
-                oldList.reading = e.target.checked;
                 oldList.worksheet = !e.target.checked;
                 break;
             case 'worksheet':
-                oldList.worksheet = e.target.checked;
                 oldList.training = !e.target.checked;
                 break;
             case 'training':
-                oldList.training = e.target.checked;
                 oldList.testpiece = !e.target.checked;
                 break;
             case 'testpiece':
-                oldList.testpiece = e.target.checked;
                 // Show rest of the form
                 break;
         }
