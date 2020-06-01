@@ -60,7 +60,7 @@ def trainings():
     trainings = Training.query.filter_by(trainee=user).all()
     return render_template('trainings.j2', trainings=trainings)
 
-@public.route('/trainings/new', methods=['GET', 'POST'])
+@public.route('/trainings/new/', methods=['GET', 'POST'])
 def new_training():
     form = NewTrainingForm()
     form.tool.choices = [(tool.shortname, tool.name) for tool in Tool.query.all()]

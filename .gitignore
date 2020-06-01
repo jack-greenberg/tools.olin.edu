@@ -10,3 +10,4 @@ venv/
 *.log
 
 build/
+_old/

@@ -1,6 +1,6 @@
 import React from 'react';
 import { client } from './api';
-
+import * as Icon from 'react-feather';
 
 export default class Training extends React.Component {
     constructor(props) {
@@ -43,11 +43,11 @@ export default class Training extends React.Component {
             )
         } else {
             return (
-                <main>
-                    <h1>{this.state.tool.name} Training</h1>
-                    <section className="Checklist">
-                        <Checklist permissions={this.state.permissions} />
-                    </section>
+                <main className="Page">
+                    <header className="Page__header">
+                        <h1 className="Page__header__title">{this.state.tool.name} Training Checklist</h1>
+                    </header>
+                    <Checklist permissions={this.state.permissions} />
                 </main>
             )
         }
@@ -98,46 +98,30 @@ class Checklist extends React.Component {
 
         return (
             <>
-                <h2 className="Checklist__title">Checklist</h2>
                 <form>
-                    <ChecklistItem disabled={this.state.disabledList.reading} name="reading" handleCheck={this.handleCheck}>
-                        Completed <a href="#">Readings</a>
+                    <section className="Checklist">
+                        <ChecklistItem disabled={this.state.disabledList.reading} name="reading" handleCheck={this.handleCheck}>
+                            Completed <a href="#">Readings</a>
+                        </ChecklistItem>
+
+                        <ChecklistItem disabled={this.state.disabledList.worksheet} name="worksheet" handleCheck={this.handleCheck}>
+                            Completed <a href="#">Worksheet</a>
+                        </ChecklistItem>
+
+                        <ChecklistItem disabled={this.state.disabledList.training} name="training" handleCheck={this.handleCheck}>
+                            Completed Training
+                        </ChecklistItem>
+
+                        <ChecklistItem disabled={this.state.disabledList.testpiece} name="testpiece" handleCheck={this.handleCheck}>
+                            Completed Test Piece
+                        </ChecklistItem>
+                    </section>
+
+                    <AuthorizeButton label="Trainer Approval" disabled={true} />
+
+                    <ChecklistItem disabled={false} name="agreement" handleCheck={this.handleCheck}>
+                        I agree to the terms and conditions.
                     </ChecklistItem>
-
-                    <ChecklistItem disabled={this.state.disabledList.worksheet} name="worksheet" handleCheck={this.handleCheck}>
-                        Completed <a href="#">Worksheet</a>
-                    </ChecklistItem>
-
-                    <ChecklistItem disabled={this.state.disabledList.training} name="training" handleCheck={this.handleCheck}>
-                        Completed Training
-                    </ChecklistItem>
-
-                    <ChecklistItem disabled={this.state.disabledList.testpiece} name="testpiece" handleCheck={this.handleCheck}>
-                        Completed Test Piece
-                    </ChecklistItem>
-
-                    <div className="Checklist__text">
-                        <label htmlFor="trainer-password">
-                            <span>Trainer Password</span>
-                            <input type="password" name="" id="trainer-password" />
-                        </label>
-                        <button type="button" onClick={""}>></button>
-                    </div>
-
-                    <div className="Checklist__text">
-                        <label htmlFor="trainer-password">
-                            <span>Student Password</span>
-                            <input type="password" name="" id="trainer-password" />
-                        </label>
-                        <button type="button" onClick={""}>></button>
-                    </div>
-
-                    <div className="Checklist__item">
-                        <label>
-                            <input className="Checklist__item__checkbox" name={this.props.name} type="checkbox" defaultChecked={false} onChange={""} />
-                            <span className="Checklist__item__label">I have read...</span>
-                        </label>
-                    </div>
                 </form>
             </>
         )
@@ -151,12 +135,55 @@ class ChecklistItem extends React.Component {
 
     render() {
         return (
-            <div className="Checklist__item">
-                <label>
-                    <input className="Checklist__item__checkbox" name={this.props.name} type="checkbox" defaultChecked={false} onChange={this.props.handleCheck} disabled={this.props.disabled} />
-                    <span className="Checklist__item__label">{this.props.children}</span>
+            <div className="Checkbox">
+                <label className="Checkbox__flex">
+                    <input style={{display: 'none'}} className="Checkbox__input" name={this.props.name} type="checkbox" defaultChecked={false} onChange={this.props.handleCheck} disabled={this.props.disabled} />
+                    <span className="Checkbox__icon">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            >
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                    </span>
+                    <span className="Checkbox__label">{this.props.children}</span>
                 </label>
             </div>
+        )
+    }
+}
+
+class AuthorizeButton extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.authorize = this.authorize.bind(this);
+    }
+
+    authorize() {
+
+    }
+
+    render() {
+        return (
+            <>
+                <button type="button" className="AuthorizeButton" disabled={this.props.disabled} onClick={this.authorize}>
+                    <div className="AuthorizeButton__button">
+                        <Icon.Shield />
+                    </div>
+
+                    <div className="AuthorizeButton__label">
+                        {this.props.label}
+                    </div>
+                </button>
+            </>
         )
     }
 }
