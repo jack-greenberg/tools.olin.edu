@@ -1,0 +1,34 @@
+version: "2"
+services:
+  tools-backend:
+    container_name: tools-backend
+    build:
+      context: .
+    depends_on:
+      - tools-db
+    restart: always
+    tty: true
+    ports:
+      - "8000:5000"
+    volumes:
+      - .:/tools
+    networks:
+      - tools-net
+
+  tools-db:
+    container_name: tools-db
+    image: postgres:12.3
+    environment:
+      POSTGRES_DB: tools
+      POSTGRES_USER: tools
+      POSTGRES_PASSWORD: development
+    volumes:
+      - tools-data:/var/lib/postgresql/data
+    networks:
+      - tools-net
+
+networks:
+  tools-net:
+
+volumes:
+  tools-data:

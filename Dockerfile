@@ -1,14 +1,12 @@
-FROM alpine
-RUN apk add --no-cache \
-    python3-dev \
+FROM python:3.7-buster
 
 RUN mkdir /tools
 WORKDIR /tools
 
 COPY . /tools
 
-RUN poetry config virtualenvs.create false \
-    && poetry install $(test "$YOUR_ENV" == production && echo "--no-dev") \
-        --no-interaction --no-ansi
+RUN pip3 install poetry
+RUN poetry config virtualenvs.create false
+RUN poetry install --no-dev
 
 CMD ["/tools/scripts/entrypoint.sh"]

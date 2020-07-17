@@ -1,0 +1,4 @@
+[flake8]
+select = C,E,F,W
+max-complexity = 10
+exclude = .git,__pycache__,docs/source/conf.py,old,build,dist
