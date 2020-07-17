@@ -1,12 +1,22 @@
 from flask import Flask
-from tools.routes import API, public
+from tools.config import DevelopmentConfig, ProductionConfig
+from tools.routes import blueprints
 
 """
 Tools.Olin.Edu
 """
 
 
-def start_app():
+def start_app(config):
     app = Flask(__name__)
-    app.register_blueprint(API)
-    app.register_blueprint(public)
+    app.config.from_object(config)
+
+    for bp in blueprints:
+        app.register_blueprint(bp)
+
+    return app
+
+
+if __name__ == "__main__":
+    app = start_app()
+    app.run("0.0.0.0")
