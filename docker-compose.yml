@@ -1,12 +1,12 @@
-version: "2"
+version: "3.8"
 services:
   tools-backend:
-    container_name: tools-backend
     build:
       context: .
+    container_name: tools-backend
     depends_on:
       - tools-db
-    restart: always
+    # restart: always
     tty: true
     ports:
       - "8000:5000"
@@ -29,6 +29,8 @@ services:
 
 networks:
   tools-net:
+    name: tools-net
 
 volumes:
   tools-data:
+    name: tools-data
