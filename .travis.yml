@@ -6,14 +6,13 @@ services:
 env:
   global:
     - IMAGE_NAME=jackgreenberg/tools
-    - secure:
+    - BASE_IMAGE=jackgreenberg/poetry:latest
 before_install:
-  - docker build -t jackgreenberg/tools .
-  # - docker run --rm
-install:
-  - poetry install
+  - docker pull ${BASE_IMAGE}
+  - docker build -t ${IMAGE_NAME} .
+  - docker images
+  - docker-compose up -d
+  - docker run ${IMAGE_NAME} /bin/bash "cd /tools; nox"
 
-jobs:
-  include:
-    - stage: test
-      script: nox
+script:
+  - nox

@@ -3,6 +3,7 @@ services:
   tools-backend:
     build:
       context: .
+    image: jackgreenberg/tools:latest
     container_name: tools-backend
     depends_on:
       - tools-db
