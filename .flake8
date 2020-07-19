@@ -2,3 +2,5 @@
 select = C,E,F,W
 max-complexity = 10
 exclude = .git,__pycache__,docs/source/conf.py,old,build,dist
+max-line-length = 88
+ignore = E126,E121

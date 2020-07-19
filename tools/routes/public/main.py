@@ -1,3 +1,8 @@
-from flask import blueprint
+from flask import Blueprint
 
-RM = blueprint("public", url_prefix="/")
+public = Blueprint("public", __name__, url_prefix="/")
+
+
+@public.route("/")
+def index():
+    return "Testing"

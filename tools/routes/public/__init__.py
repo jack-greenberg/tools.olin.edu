@@ -1,1 +1,3 @@
-from .main import RM as PUBLIC
+from .main import public
+
+__all__ = ["public"]

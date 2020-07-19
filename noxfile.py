@@ -7,7 +7,8 @@ nox.options.sessions = "lint", "safety", "tests"
 
 @nox.session(python=["3.7"])
 def tests(session):
-    args = session.posargs or ["--cov"]
+    #  args = session.posargs or ["--cov"]
+    args = session.posargs
     session.run("poetry", "install", external=True)
     session.run("pytest", *args)
 
@@ -19,7 +20,7 @@ def lint(session):
     session.run("flake8", *args)
 
 
-@nox.session(python="3.8")
+@nox.session(python="3.7")
 def black(session):
     args = session.posargs or locations
     session.install("black")

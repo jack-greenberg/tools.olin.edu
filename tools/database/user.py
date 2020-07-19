@@ -1,6 +1,7 @@
-from sqlalchemy import *
+from sqlalchemy import Column, Integer, String, relationship
 from . import Base
-from tools.utils import Scope
+
+#  from tools.utils import Scope
 
 
 class User(Base):

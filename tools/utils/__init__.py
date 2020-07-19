@@ -1,1 +1,3 @@
-from scopes import *
+from .scopes import Scope
+
+__all__ = ["Scope"]

@@ -1,1 +1,3 @@
-from .graphql import RM as API
+from .graphql import API
+
+__all__ = ["API"]
