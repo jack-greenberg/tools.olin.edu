@@ -3,8 +3,12 @@ python:
   - 3.7
 services:
   - docker
+env:
+  global:
+    - IMAGE_NAME=jackgreenberg/tools
+    - secure:
 before_install:
-  - docker build -t jgreenberg/tools .
+  - docker build -t jackgreenberg/tools .
   # - docker run --rm
 install:
   - poetry install
