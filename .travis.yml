@@ -5,7 +5,7 @@ services:
   - docker
 env:
   global:
-    - DOCKER_COMPOSE_VERSION=3.8
+    - DOCKER_COMPOSE_VERSION=1.26.2
     - IMAGE_NAME=jackgreenberg/tools
     - BASE_IMAGE=jackgreenberg/poetry:latest
 before_install:
