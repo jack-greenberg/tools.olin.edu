@@ -1,7 +1,7 @@
 import re
 
 from sqlalchemy import create_engine, cast
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.engine.url import URL
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import ARRAY
@@ -11,8 +11,11 @@ from tools.config import DATABASE_CONFIG
 BASE = declarative_base()
 
 engine = create_engine(URL(**DATABASE_CONFIG))
-db_session = sessionmaker(bind=engine)
+Session = sessionmaker(bind=engine)
 
+db_session = scoped_session(Session)
+
+BASE.query = db_session.query_property()
 
 # def db_connect(**kwargs):
 #     """
