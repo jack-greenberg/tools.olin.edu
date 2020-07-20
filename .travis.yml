@@ -1,6 +1,8 @@
+sudo: required
 language: python
 python:
   - 3.7
+cache: pip
 services:
   - docker
 env:
@@ -8,23 +10,20 @@ env:
     - DOCKER_COMPOSE_VERSION=1.26.2
     - IMAGE_NAME=jackgreenberg/tools
     - BASE_IMAGE=jackgreenberg/poetry:latest
+    - secure: hCBw+brUJGBrwQWN9Ac77T1TAmadeygVjIKTpBPuB9i/WgxDCPEFipGz7CVarEUrX0bQWhoH4w0nNAmpbpayw/lcgE6fUFAKUcz+AIOKxDKyilZ8xa2FFxjp3bPYl4fpW03R0Q5q2MoyhIAI4lDt2azuVqkWdnO4wDll4ltazr2qQ0fVE4GZn2RlJwphuwC9bpSkpDH4/AWbNivBBXbW0O4AEoBGRh9oAohoeVAVhVIJ90hyccIcfhlRUjreZKG1SxWUUDvlIwRrcrOEJEt/ntyoprpqwkw0h3MuqthgXnrCyv8Q8v2WZoXlEeEqm1dsNCb73gcxZj461XUYngub5zWNUPBvWedBB838ei7RTx8fl7gj0OtDXZDkqJflMg3sEIIdyQvskFkd5zcrNZWIdcDrD4cvL/AQQ0tlbbX8/cmJQla6VpmYzjv1IfllQTFF1m5KYxeQ3UJ3hs1Yw8qqCzUBGT+JcfhFIyQyozuisQA4aAOhbZNBDOwCtPKOrNoznQIwlrk/BWU9beoQ8eFcqaio6jJB6snQbrfpEjaCnqGzTkLuYGRkL/lFhGy6/20JVG9anbcPxrgXKEHcQKrMxVmceku/f8OyD+olIV5Zcj0wLOxAFB1uO8dvfqowkvAiZA+O3SgICUwhrHU70DNkN1SV4Gi66cD7GBp+dOAwzK8=
+
 before_install:
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
-  - docker-compose --version
-  - docker pull ${BASE_IMAGE}
-  - docker build -t ${IMAGE_NAME} .
+  - docker pull ${BASE_IMAGE} || true
+  - docker build --pull --cache-from ${IMAGE_NAME} --tag ${IMAGE_NAME} .
   - docker images
-  - docker-compose up -d
-  - docker ps
-
 install:
-  - docker exec -ti tools-backend /bin/bash -c "pip3 install pytest"
-
+  - pip3 install poetry nox
+  - poetry export -f requirements.txt | pip3 install -r /dev/stdin
 script:
-  - docker exec -ti tools-backend /tools/scripts/testing.sh
-
-after_script:
-  - docker-compose down
+  - nox
+before_deploy:
+  - docker login -u "$DOCKER_USER" -p "$DOCKER_PASS"
+  - docker tag back ${IMAGE_NAME}:$TRAVIS_BUILD_NUMBER
+  - docker push ${IMAGE_NAME}:$TRAVIS_BUILD_NUMBER
+  - docker tag back ${IMAGE_NAME}:latest
+  - docker push ${IMAGE_NAME}:latest
