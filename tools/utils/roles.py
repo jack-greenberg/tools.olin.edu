@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Scope(Enum):
+class Role(Enum):
     BASE = "base"
     STUDENT = "student"
     NINJA = "ninja"

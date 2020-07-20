@@ -1,3 +1,3 @@
-from .scopes import Scope
+from .roles import Role
 
-__all__ = ["Scope"]
+__all__ = ["Role"]
