@@ -9,12 +9,11 @@ WORKDIR /tools
 COPY pyproject.toml /tools/
 
 RUN poetry config virtualenvs.create false
-RUN poetry install --no-root --no-dev
 
 FROM build
 
 ADD . /tools/
 WORKDIR /tools
-RUN ["poetry", "install", "--no-dev"]
+RUN ["poetry", "install"]
 
 CMD ["/tools/scripts/entrypoint.sh"]
