@@ -5,7 +5,7 @@ class Scope(Enum):
     BASE = "base"
     STUDENT = "student"
     NINJA = "ninja"
-    FACULTY = "facultly"
+    FACULTY = "faculty"
     ADMIN = "admin"
 
     def to_str(self):
