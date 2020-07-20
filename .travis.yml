@@ -14,16 +14,16 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - docker-compose --version
-
-install:
   - docker pull ${BASE_IMAGE}
   - docker build -t ${IMAGE_NAME} .
   - docker images
   - docker-compose up -d
+
+install:
   - docker exec -ti tools-backend /bin/bash -c "pip3 install nox==2020.5.24 poetry==1.0.5"
 
 script:
-  - docker exec -ti tools-backend /bin/bash -c "pip3 install nox && nox -rs"
+  - docker exec -ti tools-backend /bin/bash -c "pip3 install nox && nox"
 
 after_script:
   - docker-compose down
