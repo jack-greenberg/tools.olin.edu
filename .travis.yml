@@ -20,8 +20,8 @@ before_install:
   - docker-compose up -d
   - docker ps
 
-# install:
-  # - docker exec -ti tools-backend /bin/bash -c "pip3 install nox==2020.5.24 poetry==1.0.9"
+install:
+  - docker exec -ti tools-backend /bin/bash -c "pip3 install pytest"
 
 script:
   - docker exec -ti tools-backend /tools/scripts/testing.sh
