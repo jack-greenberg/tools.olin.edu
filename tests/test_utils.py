@@ -1,5 +1,5 @@
-from tools.utils import Scope
+from tools.utils import Role
 
 
 def test_scope_string():
-    assert str(Scope.STUDENT) == "olin:student"
+    assert str(Role.STUDENT) == "olin:student"
