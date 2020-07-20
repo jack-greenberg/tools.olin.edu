@@ -5,24 +5,25 @@ services:
   - docker
 env:
   global:
-    # - DOCKER_COMPOSE_VERSION=1.26.2
+    - DOCKER_COMPOSE_VERSION=1.26.2
     - IMAGE_NAME=jackgreenberg/tools
     - BASE_IMAGE=jackgreenberg/poetry:latest
 before_install:
-  # - sudo rm /usr/local/bin/docker-compose
-  # - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  # - chmod +x docker-compose
-  # - sudo mv docker-compose /usr/local/bin
-  # - docker-compose --version
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - docker-compose --version
+
+install:
   - docker pull ${BASE_IMAGE}
   - docker build -t ${IMAGE_NAME} .
   - docker images
-  # - docker-compose up -d
-  # - docker run ${IMAGE_NAME} /bin/bash
-
-install:
-  - pip3 install nox==2020.5.24
-  - pip3 install poetry==1.0.5
+  - docker-compose up -d
+  - docker exec -ti tools-backend /bin/bash -c "pip3 install nox==2020.5.24"
 
 script:
-  - nox
+  - docker exec -ti tools-backend /bin/bash -c "pip3 install nox && nox -rs"
+
+after_script:
+  - docker-compose down

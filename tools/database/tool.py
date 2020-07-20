@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum as EnumType
-from tools.database import BASE, ArrayOfEnum
+from tools.database import BASE  # , ArrayOfEnum
 from enum import Enum
 
 

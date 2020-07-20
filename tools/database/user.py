@@ -1,7 +1,9 @@
 from sqlalchemy import Column, Table, Integer, String, Enum, ForeignKey
-from sqlalchemy.orm import relationship
+
+#  from sqlalchemy.orm import relationship
 from tools.database import BASE
-from tools.database.tool import TrainingLevel
+
+#  from tools.database.tool import TrainingLevel
 
 from tools.utils import Scope
 

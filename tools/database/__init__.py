@@ -1,10 +1,11 @@
-from contextlib import contextmanager
+import re
 
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy import create_engine, TypeDecorator
-from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy import create_engine, cast
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine.url import URL
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.dialects.postgresql import ARRAY
+
 from tools.config import DATABASE_CONFIG
 
 BASE = declarative_base()
@@ -48,11 +49,9 @@ db_session = sessionmaker(bind=engine)
 #  return SessionFactory.session(**kwargs)
 
 
-class ArrayOfEnum(TypeDecorator):
-    impl = ARRAY
-
+class ArrayOfEnum(ARRAY):
     def bind_expression(self, bindvalue):
-        return sa.cast(bindvalue, self)
+        return cast(bindvalue, self)
 
     def result_processor(self, dialect, coltype):
         super_rp = super(ArrayOfEnum, self).result_processor(dialect, coltype)
