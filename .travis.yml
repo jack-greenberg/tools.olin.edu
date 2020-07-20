@@ -20,7 +20,7 @@ install:
   - docker build -t ${IMAGE_NAME} .
   - docker images
   - docker-compose up -d
-  - docker exec -ti tools-backend /bin/bash -c "pip3 install nox==2020.5.24"
+  - docker exec -ti tools-backend /bin/bash -c "pip3 install nox==2020.5.24 poetry==1.0.5"
 
 script:
   - docker exec -ti tools-backend /bin/bash -c "pip3 install nox && nox -rs"
