@@ -21,7 +21,7 @@ install:
   - poetry export -f requirements.txt | pip3 install -r /dev/stdin
 script:
   - nox
-before_deploy:
+after_success:
   - docker login -u "$DOCKER_USER" -p "$DOCKER_PASS"
   - docker tag back ${IMAGE_NAME}:$TRAVIS_BUILD_NUMBER
   - docker push ${IMAGE_NAME}:$TRAVIS_BUILD_NUMBER
