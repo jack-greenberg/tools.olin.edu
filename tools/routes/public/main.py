@@ -5,4 +5,4 @@ public = Blueprint("public", __name__, url_prefix="/")
 
 @public.route("/")
 def index():
-    return "Testing"
+    return "ASDF"

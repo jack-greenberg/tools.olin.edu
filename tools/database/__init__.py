@@ -1,9 +1,69 @@
+from contextlib import contextmanager
+
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, TypeDecorator
+from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy.engine.url import URL
+from tools.config import DATABASE_CONFIG
 
-engine = create_engine("postgresql:///tools", convert_unicode=True)
-db = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
+BASE = declarative_base()
 
-Base = declarative_base()
-Base.query = db.query_property()
+engine = create_engine(URL(**DATABASE_CONFIG))
+db_session = sessionmaker(bind=engine)
+
+
+# def db_connect(**kwargs):
+#     """
+#     Create database connection, should only happen once per application
+#     """
+#     engine = create_engine(
+#         URL(**DATABASE_CONFIG),
+#         **kwargs
+#     )
+#     BASE.metadata.create_all(bind=engine)
+#     return engine
+#
+#
+#  class SessionFactory(object):
+#  """
+#  A session maker, ensures that a sessionmaker is only created once
+#  """
+#  _pool = None
+#  _sessionfactory = None
+#
+#  @classmethod
+#  def session(cls, **kwargs):
+#  if cls._sessionfactory is None:
+#  engine = db_connect(**kwargs)
+#  cls._pool = engine.pool
+#  cls._sessionfactory = sessionmaker(
+#  autocommit=False,
+#  bind=engine
+#  )
+#  return cls._sessionfactory()
+
+
+#  def create_session(**kwargs):
+#  return SessionFactory.session(**kwargs)
+
+
+class ArrayOfEnum(TypeDecorator):
+    impl = ARRAY
+
+    def bind_expression(self, bindvalue):
+        return sa.cast(bindvalue, self)
+
+    def result_processor(self, dialect, coltype):
+        super_rp = super(ArrayOfEnum, self).result_processor(dialect, coltype)
+
+        def handle_raw_string(value):
+            inner = re.match(r"^{(.*)}$", value).group(1)
+            return inner.split(",") if inner else []
+
+        def process(value):
+            if value is None:
+                return None
+            return super_rp(handle_raw_string(value))
+
+        return process

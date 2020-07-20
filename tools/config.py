@@ -23,3 +23,13 @@ class ProductionConfig(BaseConfig):
     TESTING = False
     ENV = "production"
     SECRET_KEY = os.getenv("FLASK_SECRET_KEY", os.urandom(16))
+
+
+DATABASE_CONFIG = {
+    "drivername": "postgresql",
+    "host": "tools-db",
+    "port": "5432",
+    "username": "tools",
+    "password": "development",
+    "database": "tools",
+}
