@@ -1,12 +1,14 @@
-from graphene import Schema as BaseSchema, Enum
+from graphene import Schema as BaseSchema
 
-from tools.utils import Role
 from .user import UserQuery, UserMutation
+
+# from .tool import ToolQuery, ToolMutation
+
+__all__ = ["AppSchema"]
 
 """
 Enums
 """
-RoleEnum = Enum.from_enum(Role)
 
 
 """
@@ -15,6 +17,7 @@ Base Objects
 
 
 class BaseQuery(UserQuery):
+    # node = relay.Node.Field()
     pass
 
 

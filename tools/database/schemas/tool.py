@@ -1,7 +1,8 @@
 from graphene import Field, Int, Mutation, ObjectType, String, List
 
-from .models import Tool as ToolModel
-from tools.database import db_context
+from ..models import Tool as ToolModel, ToolCategory as ToolCategoryModel
+
+# from tools.database import db_context
 
 """
 Schemas
@@ -25,6 +26,12 @@ class Tool(ObjectType):
     category = ToolCategory()
     levels = List(ToolLevel)
 
+    def resolve_category(self, info, db_session=None, **kwargs):
+        pass
+
+    def resolve_levels(self, info, db_session=None, **kwargs):
+        pass
+
 
 """
 Queries
@@ -33,20 +40,24 @@ Queries
 
 class ToolQuery(ObjectType):
     tool = Field(Tool, id=Int(required=True))
-    categories = Field(ToolCategory, name=String(required=True))
+    tools_by_category = Field(Tool, category=String(required=True))
+    # categories = Field(ToolCategory, name=String(required=True))
 
-    @db_context
+    @staticmethod
     def resolve_tool(self, info, id, db_session=None, **kwargs):
         tool = db_session.query(ToolModel).get(id)
+        print(tool)
         return tool
 
-    @db_context
-    def resolve_categories(self, info, name):
-        pass
+    @staticmethod
+    def resolve_tools_by_category(self, info, category, db_session=None, **kwargs):
+        tools = (
+            ToolModel.query.filter.join(ToolCategoryModel, aliased=True)
+            .filter_by(name=category)
+            .all()
+        )
 
-
-class ToolCategoryQuery(ObjectType):
-    pass
+        return tools
 
 
 """
@@ -61,10 +72,10 @@ class AddTool(Mutation):
     Output = Tool
 
     @staticmethod
-    @db_context
     def mutate(self, info, db_session=None, **kwargs):
         new_tool = ToolModel(**kwargs)
         db_session.add(new_tool)
+        print(new_tool)
         return new_tool
 
 

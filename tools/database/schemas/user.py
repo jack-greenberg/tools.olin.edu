@@ -1,77 +1,71 @@
-from graphene import Field, Int, Mutation, List, ObjectType, String
-from .models import User as UserModel
+from graphene import Int, Mutation, List, ObjectType, String, Argument
+from graphene_sqlalchemy import SQLAlchemyObjectType
+
+from ..models import User as UserModel
 from tools.utils import Role
-from tools.database import db_context
-from . import RoleEnum
-from .tool import Tool
+from tools.database import Session
 
-"""
-Schemas
-"""
+# RoleEnum = Enum.from_enum(Role)
 
-
-class User(ObjectType):
-    id = Int()
-    name = String()
-    email = String()
-    role = RoleEnum()
-    first_name = String()
-    last_name = String()
-    class_year = Int()
-
-    tools = List(Tool)
+#########
+# Schemas
+#########
 
 
-"""
-Queries
-"""
+class User(SQLAlchemyObjectType):
+    class Meta:
+        model = UserModel
+
+
+#########
+# Queries
+#########
 
 
 class UserQuery(ObjectType):
-    user = Field(User, id=Int(required=True))
+    users = List(User)
 
-    @db_context
-    def resolve_user(self, info, id, db_session=None):
-        user = db_session.query(UserModel).get(id)
-        return user
-
-
-"""
-Mutations
-"""
+    def resolve_users(self, info):
+        query = User.get_query(info)
+        return query.all()
 
 
+###########
+# Mutations
+###########
 class AddUser(Mutation):
     class Arguments:
         name = String(required=True)
-        role = RoleEnum()
+        role = Argument(User.enum_for_field("role"))
 
     Output = User
 
     @staticmethod
-    @db_context
-    def mutate(self, info, db_session=None, **kwargs):
+    def mutate(self, info, **kwargs):
+        db_session = Session()
         kwargs["role"] = Role(kwargs["role"])
         new_user = UserModel(**kwargs)
         db_session.add(new_user)
+
         return new_user
 
 
 class UpdateUserRole(Mutation):
     class Arguments:
         id = Int(required=True)
-        role = RoleEnum()
+        role = Argument(User.enum_for_field("role"))
 
     Output = User
 
     @staticmethod
-    @db_context
-    def mutate(self, info, db_session=None, **kwargs):
+    def mutate(self, info, **kwargs):
+        db_session = Session()
         id = kwargs.pop("id")
         kwargs["role"] = Role(kwargs["role"])
         user = db_session.query(UserModel).get(id)
         for key, value in kwargs.items():
             setattr(user, key, value)
+        db_session.commit()
         return user
 
 

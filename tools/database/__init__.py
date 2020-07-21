@@ -1,71 +1,44 @@
 import re
 
 from sqlalchemy import create_engine, cast
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.engine.url import URL
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import ARRAY
+from flask import request
 
 from tools.config import DATABASE_CONFIG
 from tools.routes.errors import AppException
-
-BASE = declarative_base()
-
-
-class Base(BASE):
-    """
-    Base model object with added classes
-    """
-
-    pass
-    #
-    # # Create
-    # @classmethod
-    # @db_context
-    # def new(cls, db_session=None, **kwargs):
-    #     obj = cls(**kwargs)
-    #     db_session.add(cls(obj))
-    #     return obj
-    #
-    # # Read
-    # @classmethod
-    # @db_context
-    # def all(cls, db_session=None, **kwargs):
-    #     results = db_session.query(cls).all()
-    #     return [r for r in results]
-    #
-    # @classmethod
-    # @db_context
-    # def find(cls, db_session=None, **kwargs):
-    # result = db_session.query(cls).filter()
-    #
-    # # Update
-    # @classmethod
-    # @db_context
-    # def update()
-
 
 ENGINE = create_engine(URL(**DATABASE_CONFIG))
 
 Session = sessionmaker(bind=ENGINE)
 
+BASE = declarative_base()
+
+scope_session = scoped_session(Session)
+BASE.query = scope_session.query_property()
+
 
 def db_context(f):
     def wrapper(*args, **kwargs):
+        print(request)
         if kwargs.get("db_session"):
             return f(*args, **kwargs)
 
         db_session = Session()
         try:
-            kwargs["db_session"] = db_session
-            f(*args, **kwargs)
+            kwargs["db_session"] = request.view_args.get("db_session")
+            result = f(*args, **kwargs)
             db_session.commit()
+            return result
         except Exception as e:
             db_session.rollback()
             raise AppException(e)
         finally:
             try:
-                db_session.close()
+                # db_session.close()
+                pass
             except:  # noqa
                 print("Could not close session: %s" % db_session)
 
