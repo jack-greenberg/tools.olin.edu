@@ -30,4 +30,4 @@ def start_app(config):
 if __name__ == "__main__":
     app = start_app(DevelopmentConfig)
     app.logger.info("Starting app...")
-    app.run("0.0.0.0")
+    app.run("0.0.0.0", debug=True)

@@ -1,11 +1,13 @@
-import graphene
-from graphene import Enum, Field, Int, Mutation, ObjectType, String
+from graphene import Field, Int, Mutation, List, ObjectType, String
 from .models import User as UserModel
 from tools.utils import Role
-from tools.database import db_session
+from tools.database import db_context
+from . import RoleEnum
+from .tool import Tool
 
-
-RoleEnum = Enum.from_enum(Role)
+"""
+Schemas
+"""
 
 
 class User(ObjectType):
@@ -17,13 +19,26 @@ class User(ObjectType):
     last_name = String()
     class_year = Int()
 
+    tools = List(Tool)
+
+
+"""
+Queries
+"""
+
 
 class UserQuery(ObjectType):
     user = Field(User, id=Int(required=True))
 
-    def resolve_user(self, info, id):
+    @db_context
+    def resolve_user(self, info, id, db_session=None):
         user = db_session.query(UserModel).get(id)
         return user
+
+
+"""
+Mutations
+"""
 
 
 class AddUser(Mutation):
@@ -34,12 +49,11 @@ class AddUser(Mutation):
     Output = User
 
     @staticmethod
-    def mutate(self, info, **kwargs):
+    @db_context
+    def mutate(self, info, db_session=None, **kwargs):
         kwargs["role"] = Role(kwargs["role"])
         new_user = UserModel(**kwargs)
         db_session.add(new_user)
-        db_session.commit()
-
         return new_user
 
 
@@ -51,28 +65,16 @@ class UpdateUserRole(Mutation):
     Output = User
 
     @staticmethod
-    def mutate(self, info, **kwargs):
+    @db_context
+    def mutate(self, info, db_session=None, **kwargs):
         id = kwargs.pop("id")
         kwargs["role"] = Role(kwargs["role"])
         user = db_session.query(UserModel).get(id)
         for key, value in kwargs.items():
             setattr(user, key, value)
-
-        db_session.commit()
         return user
 
 
 class UserMutation(ObjectType):
     add_user = AddUser.Field()
     update_user = UpdateUserRole.Field()
-
-
-class Query(UserQuery):
-    pass
-
-
-class Mutation(UserMutation):
-    pass
-
-
-schema = graphene.Schema(query=Query, mutation=UserMutation)

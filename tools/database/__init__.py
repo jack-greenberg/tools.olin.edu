@@ -1,21 +1,76 @@
 import re
 
 from sqlalchemy import create_engine, cast
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.engine.url import URL
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import ARRAY
 
 from tools.config import DATABASE_CONFIG
+from tools.routes.errors import AppException
 
 BASE = declarative_base()
 
-engine = create_engine(URL(**DATABASE_CONFIG))
-Session = sessionmaker(bind=engine)
 
-db_session = scoped_session(Session)
+class Base(BASE):
+    """
+    Base model object with added classes
+    """
 
-BASE.query = db_session.query_property()
+    pass
+    #
+    # # Create
+    # @classmethod
+    # @db_context
+    # def new(cls, db_session=None, **kwargs):
+    #     obj = cls(**kwargs)
+    #     db_session.add(cls(obj))
+    #     return obj
+    #
+    # # Read
+    # @classmethod
+    # @db_context
+    # def all(cls, db_session=None, **kwargs):
+    #     results = db_session.query(cls).all()
+    #     return [r for r in results]
+    #
+    # @classmethod
+    # @db_context
+    # def find(cls, db_session=None, **kwargs):
+    # result = db_session.query(cls).filter()
+    #
+    # # Update
+    # @classmethod
+    # @db_context
+    # def update()
+
+
+ENGINE = create_engine(URL(**DATABASE_CONFIG))
+
+Session = sessionmaker(bind=ENGINE)
+
+
+def db_context(f):
+    def wrapper(*args, **kwargs):
+        if kwargs.get("db_session"):
+            return f(*args, **kwargs)
+
+        db_session = Session()
+        try:
+            kwargs["db_session"] = db_session
+            f(*args, **kwargs)
+            db_session.commit()
+        except Exception as e:
+            db_session.rollback()
+            raise AppException(e)
+        finally:
+            try:
+                db_session.close()
+            except:  # noqa
+                print("Could not close session: %s" % db_session)
+
+    return wrapper
+
 
 # def db_connect(**kwargs):
 #     """
@@ -29,27 +84,23 @@ BASE.query = db_session.query_property()
 #     return engine
 #
 #
-#  class SessionFactory(object):
-#  """
-#  A session maker, ensures that a sessionmaker is only created once
-#  """
-#  _pool = None
-#  _sessionfactory = None
+# class SessionFactory(object):
+#     """
+#     A session maker, ensures that a sessionmaker is only created once
+#     """
+#     _pool = None
+#     _sessionfactory = None
 #
-#  @classmethod
-#  def session(cls, **kwargs):
-#  if cls._sessionfactory is None:
-#  engine = db_connect(**kwargs)
-#  cls._pool = engine.pool
-#  cls._sessionfactory = sessionmaker(
-#  autocommit=False,
-#  bind=engine
-#  )
-#  return cls._sessionfactory()
-
-
-#  def create_session(**kwargs):
-#  return SessionFactory.session(**kwargs)
+#     @classmethod
+#     def session(cls):
+#         if cls._sessionfactory is None:
+#             engine = db_connect()
+#             cls._pool = engine.pool
+#             cls._sessionfactory = sessionmaker(
+#                autocommit=False,
+#                bind=engine
+#             )
+#         return cls._sessionfactory()
 
 
 class ArrayOfEnum(ARRAY):

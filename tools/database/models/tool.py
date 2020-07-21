@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum as EnumType
+from sqlalchemy.orm import relationship
 from tools.database import BASE  # , ArrayOfEnum
 from enum import Enum
 
@@ -13,10 +14,22 @@ class Tool(BASE):
     __tablename__ = "tool"
     id = Column(Integer, primary_key=True)
     name = Column(String)
+    levels = relationship("ToolLevel")
+    category_id = Column(Integer, ForeignKey("tool_category.id"))
+    category = relationship("ToolCategory")
+
+
+class ToolCategory(BASE):
+    __tablename__ = "tool_category"
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    tools = relationship("Tool", backref="tool_category")
 
 
 class ToolLevel(BASE):
     __tablename__ = "tool_level"
     id = Column(Integer, primary_key=True)
-    tool_id = Column(Integer, ForeignKey("tool.id"))
     level = Column(EnumType(TrainingLevel))
+    tool_id = Column(Integer, ForeignKey("tool.id"))
+    prerequisite = Column(Integer, ForeignKey("tool_level.id"))
+    postrequisite = relationship("ToolLevel")
