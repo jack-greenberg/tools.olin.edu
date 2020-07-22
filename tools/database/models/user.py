@@ -18,9 +18,7 @@ class User(BASE):
     last_name = Column(String(255))
     class_year = Column(Integer)
 
-    tools = relationship(
-        "UserToolLevel", back_populates="user", innerjoin=True, lazy="select"
-    )
+    tools = relationship("UserToolLevel", back_populates="user")
     # trainings = relationship(
     #     "Training",
     #     backref="user",
@@ -33,8 +31,8 @@ class User(BASE):
 
 class UserToolLevel(BASE):
     __tablename__ = "user_tool_level"
-    user_id = Column("user_id", Integer, ForeignKey("user.id"), primary_key=True)
     user = relationship("User", back_populates="tools")
+    user_id = Column("user_id", Integer, ForeignKey("user.id"), primary_key=True)
 
     tool_id = Column("tool_id", Integer, ForeignKey("tool.id"), primary_key=True)
 

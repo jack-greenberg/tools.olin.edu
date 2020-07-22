@@ -1,11 +1,9 @@
-from graphene import Int, Mutation, List, ObjectType, String, Argument
+from graphene import Int, Mutation, List, ObjectType, String, Argument, Field
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
 from ..models import User as UserModel
 from tools.utils import Role
 from tools.database import Session
-
-# RoleEnum = Enum.from_enum(Role)
 
 #########
 # Schemas
@@ -20,10 +18,13 @@ class User(SQLAlchemyObjectType):
 #########
 # Queries
 #########
-
-
 class UserQuery(ObjectType):
+    user = Field(User, id=Int())
     users = List(User)
+
+    def resolve_user(self, info, id=None):
+        query = User.get_query(info).filter(UserModel.id == id)
+        return query.first()
 
     def resolve_users(self, info):
         query = User.get_query(info)

@@ -2,7 +2,7 @@ from graphene import Schema as BaseSchema
 
 from .user import UserQuery, UserMutation
 
-# from .tool import ToolQuery, ToolMutation
+from .tool import ToolQuery, ToolMutation
 
 __all__ = ["AppSchema"]
 
@@ -16,12 +16,11 @@ Base Objects
 """
 
 
-class BaseQuery(UserQuery):
-    # node = relay.Node.Field()
+class BaseQuery(UserQuery, ToolQuery):
     pass
 
 
-class BaseMutation(UserMutation):
+class BaseMutation(UserMutation, ToolMutation):
     pass
 
 

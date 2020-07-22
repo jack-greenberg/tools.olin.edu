@@ -16,14 +16,14 @@ class Tool(BASE):
     name = Column(String)
     levels = relationship("ToolLevel")
     category_id = Column(Integer, ForeignKey("tool_category.id"))
-    category = relationship("ToolCategory")
+    category = relationship("ToolCategory", back_populates="tools")
 
 
 class ToolCategory(BASE):
     __tablename__ = "tool_category"
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    tools = relationship("Tool", backref="tool_category")
+    tools = relationship("Tool", back_populates="category")
 
 
 class ToolLevel(BASE):
