@@ -1,4 +1,5 @@
 *.swp
+*.ignore
 private/
 
 *.pdf
