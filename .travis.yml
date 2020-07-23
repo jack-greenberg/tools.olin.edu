@@ -24,8 +24,6 @@ install:
   - docker build -t ${IMAGE_NAME} .
   - docker images
   - docker-compose --version
-  - docker-compose up -d
-  - docker ps
 
 before_script:
   - docker-compose up -d
@@ -37,9 +35,9 @@ script:
 after_script:
   - docker-compose down
 
-after_success:
-  - docker login -u "$docker_user" -p "$docker_pass"
-  - docker tag back ${image_name}:$travis_build_number
-  - docker push ${image_name}:$travis_build_number
-  - docker tag back ${image_name}:latest
-  - docker push ${image_name}:latest
+# after_success:
+  # - docker login -u "$docker_user" -p "$docker_pass"
+  # - docker tag back ${image_name}:$travis_build_number
+  # - docker push ${image_name}:$travis_build_number
+  # - docker tag back ${image_name}:latest
+  # - docker push ${image_name}:latest
