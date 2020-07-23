@@ -5,10 +5,10 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.engine.url import URL
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import ARRAY
-from flask import request
 
 from tools.config import DATABASE_CONFIG
-from tools.routes.errors import AppException
+
+__all__ = ["ENGINE", "Session", "BASE"]
 
 ENGINE = create_engine(URL(**DATABASE_CONFIG))
 
@@ -20,29 +20,29 @@ scope_session = scoped_session(Session)
 BASE.query = scope_session.query_property()
 
 
-def db_context(f):
-    def wrapper(*args, **kwargs):
-        print(request)
-        if kwargs.get("db_session"):
-            return f(*args, **kwargs)
-
-        db_session = Session()
-        try:
-            kwargs["db_session"] = request.view_args.get("db_session")
-            result = f(*args, **kwargs)
-            db_session.commit()
-            return result
-        except Exception as e:
-            db_session.rollback()
-            raise AppException(e)
-        finally:
-            try:
-                # db_session.close()
-                pass
-            except:  # noqa
-                print("Could not close session: %s" % db_session)
-
-    return wrapper
+# def db_context(f):
+#     def wrapper(*args, **kwargs):
+#         print(request)
+#         if kwargs.get("db_session"):
+#             return f(*args, **kwargs)
+#
+#         db_session = Session()
+#         try:
+#             kwargs["db_session"] = request.view_args.get("db_session")
+#             result = f(*args, **kwargs)
+#             db_session.commit()
+#             return result
+#         except Exception as e:
+#             db_session.rollback()
+#             raise AppException(e)
+#         finally:
+#             try:
+#                 # db_session.close()
+#                 pass
+#             except:  # noqa
+#                 print("Could not close session: %s" % db_session)
+#
+#     return wrapper
 
 
 # def db_connect(**kwargs):

@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum as EnumType
 from sqlalchemy.orm import relationship
-from tools.database import BASE  # , ArrayOfEnum
 from enum import Enum
+
+from tools.database import BASE
 
 
 class TrainingLevel(Enum):

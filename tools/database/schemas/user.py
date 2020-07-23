@@ -1,9 +1,9 @@
+from flask import g
 from graphene import Int, Mutation, List, ObjectType, String, Argument, Field
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
 from ..models import User as UserModel
 from tools.utils import Role
-from tools.database import Session
 
 #########
 # Schemas
@@ -19,16 +19,15 @@ class User(SQLAlchemyObjectType):
 # Queries
 #########
 class UserQuery(ObjectType):
-    user = Field(User, id=Int())
+    user = Field(User, id=Int(required=True))
     users = List(User)
 
-    def resolve_user(self, info, id=None):
-        query = User.get_query(info).filter(UserModel.id == id)
-        return query.first()
+    def resolve_user(self, info, id=None, **kwargs):
+        user_query = g.db_session.query(UserModel).filter_by(id=id)
+        return user_query.first()
 
     def resolve_users(self, info):
-        query = User.get_query(info)
-        return query.all()
+        return g.db_session.query(UserModel).all()
 
 
 ###########
@@ -43,11 +42,10 @@ class AddUser(Mutation):
 
     @staticmethod
     def mutate(self, info, **kwargs):
-        db_session = Session()
         kwargs["role"] = Role(kwargs["role"])
         new_user = UserModel(**kwargs)
-        db_session.add(new_user)
-
+        g.db_session.add(new_user)
+        g.db_session.flush()
         return new_user
 
 
@@ -60,13 +58,11 @@ class UpdateUserRole(Mutation):
 
     @staticmethod
     def mutate(self, info, **kwargs):
-        db_session = Session()
         id = kwargs.pop("id")
         kwargs["role"] = Role(kwargs["role"])
-        user = db_session.query(UserModel).get(id)
+        user = g.db_session.query(UserModel).get(id)
         for key, value in kwargs.items():
             setattr(user, key, value)
-        db_session.commit()
         return user
 
 

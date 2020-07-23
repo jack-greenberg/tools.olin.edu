@@ -6,15 +6,6 @@ from .tool import ToolQuery, ToolMutation
 
 __all__ = ["AppSchema"]
 
-"""
-Enums
-"""
-
-
-"""
-Base Objects
-"""
-
 
 class BaseQuery(UserQuery, ToolQuery):
     pass

@@ -1,8 +1,8 @@
+from flask import g
 from graphene import Field, Int, Mutation, ObjectType, String, List
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
 from ..models import Tool as ToolModel, ToolCategory as ToolCategoryModel
-from tools.database import Session
 
 """
 Schemas
@@ -59,23 +59,21 @@ class AddTool(Mutation):
 
     @staticmethod
     def mutate(self, info, **kwargs):
-        db_session = Session()
-
-        category_name = kwargs.pop("category")
+        print(info, kwargs)
+        category_name = kwargs.get("category")
 
         new_tool = ToolModel(**kwargs)
         category = (
-            db_session.query(ToolCategoryModel).filter_by(name=category_name).first()
+            g.db_session.query(ToolCategoryModel).filter_by(name=category_name).first()
         )
 
         if not category:
             category = ToolCategoryModel(name=category_name)
-            db_session.add(category)
+            g.db_session.add(category)
 
         new_tool.category = category
-        db_session.add(new_tool)
-        db_session.commit()
-        return new_tool
+        g.db_session.add(new_tool)
+        return AddTool(tool=new_tool)
 
 
 class ToolMutation(ObjectType):
