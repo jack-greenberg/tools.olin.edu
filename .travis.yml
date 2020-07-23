@@ -1,7 +1,8 @@
-sudo: required
 language: python
 python:
   - 3.7
+os: linux
+dist: xenial
 cache: pip
 services:
   - docker
@@ -23,7 +24,6 @@ jobs:
         - docker pull ${BASE_IMAGE} || true
         - docker build -t ${IMAGE_NAME} .
         - docker images
-    - script:
         - docker-compose up -d
         - docker-compose ps
     - stage: test
