@@ -1,29 +1,16 @@
 import pytest
 
-#  from tools.database import create_session
-from tools.database import BASE
-from tools.config import DATABASE_CONFIG
-from sqlalchemy.engine.url import URL
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from tools.app import make_app
+from tools.config import ProductionConfig
 
 
-@pytest.fixture(scope="session")
-def engine():
-    _engine = create_engine(URL(**DATABASE_CONFIG))
-
-    yield _engine
-
-    _engine.dispose()
+@pytest.fixture
+def app():
+    app = make_app(ProductionConfig)
+    app.config["TESTING"] = True
+    return app
 
 
-@pytest.fixture(scope="function")
-def db_session(engine):
-    Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    session = Session()
-    BASE.metadata.create_all(bind=engine)
-
-    yield session
-
-    session.rollback()
-    session.close()
+@pytest.fixture
+def client(app):
+    return app.test_client()
