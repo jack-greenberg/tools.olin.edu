@@ -17,11 +17,15 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
+  - docker-compose --version
 
 install:
   - docker pull ${BASE_IMAGE} || true
   - docker build -t ${IMAGE_NAME} .
   - docker images
+  - docker-compose --version
+  - docker-compose up -d
+  - docker ps
 
 before_script:
   - docker-compose up -d
