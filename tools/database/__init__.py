@@ -8,6 +8,8 @@ from sqlalchemy.dialects.postgresql import ARRAY
 
 from tools.config import DATABASE_CONFIG
 
+#  from .models import *
+
 __all__ = ["ENGINE", "Session", "BASE"]
 
 ENGINE = create_engine(URL(**DATABASE_CONFIG))
