@@ -17,33 +17,25 @@ before_install:
   - curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-jobs:
-  include:
-    - stage: build
-      script:
-        - docker pull ${BASE_IMAGE} || true
-        - docker build -t ${IMAGE_NAME} .
-        - docker images
-        - docker-compose up -d
-        - docker-compose ps
-    - stage: test
-      script:
-        - docker exec -ti tools-backend nox
-        - docker-compose down
-    - stage: deploy
-      script:
-        - docker login -u "$DOCKER_USER" -p "$DOCKER_PASS"
-        - docker tag back ${IMAGE_NAME}:$TRAVIS_BUILD_NUMBER
-        - docker push ${IMAGE_NAME}:$TRAVIS_BUILD_NUMBER
-        - docker tag back ${IMAGE_NAME}:latest
-        - docker push ${IMAGE_NAME}:latest
-# install:
-  # - pip3 install poetry safety black flake8
-  # # - poetry export -f requirements.txt | pip3 install -r /dev/stdin
-  # - poetry install
-# script:
-  # - pytest -ra tests/
-  # - flake8 .
-  # - black .
-  # - poetry export -f requirements.txt | safety check --file=/dev/stdin --full-report
-# after_success:
+
+install:
+  - docker pull ${BASE_IMAGE} || true
+  - docker build -t ${IMAGE_NAME} .
+  - docker images
+
+before_script:
+  - docker-compose up -d
+  - docker-compose ps
+
+script:
+  - docker exec -ti tools-backend nox
+
+after_script:
+  - docker-compose down
+
+after_success:
+  - docker login -u "$docker_user" -p "$docker_pass"
+  - docker tag back ${image_name}:$travis_build_number
+  - docker push ${image_name}:$travis_build_number
+  - docker tag back ${image_name}:latest
+  - docker push ${image_name}:latest
