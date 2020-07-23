@@ -8,8 +8,6 @@ services:
     depends_on:
       - tools-db
     restart: always
-    env_file:
-      - .env
     tty: true
     ports:
       - "8000:5000"
