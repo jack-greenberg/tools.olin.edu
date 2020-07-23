@@ -1,0 +1,43 @@
+language: python
+python:
+  - 3.7
+os: linux
+dist: xenial
+cache: pip
+services:
+  - docker
+env:
+  global:
+    - DOCKER_COMPOSE_VERSION=1.26.2
+    - IMAGE_NAME=jackgreenberg/tools
+    - BASE_IMAGE=jackgreenberg/poetry:latest
+    - secure: hCBw+brUJGBrwQWN9Ac77T1TAmadeygVjIKTpBPuB9i/WgxDCPEFipGz7CVarEUrX0bQWhoH4w0nNAmpbpayw/lcgE6fUFAKUcz+AIOKxDKyilZ8xa2FFxjp3bPYl4fpW03R0Q5q2MoyhIAI4lDt2azuVqkWdnO4wDll4ltazr2qQ0fVE4GZn2RlJwphuwC9bpSkpDH4/AWbNivBBXbW0O4AEoBGRh9oAohoeVAVhVIJ90hyccIcfhlRUjreZKG1SxWUUDvlIwRrcrOEJEt/ntyoprpqwkw0h3MuqthgXnrCyv8Q8v2WZoXlEeEqm1dsNCb73gcxZj461XUYngub5zWNUPBvWedBB838ei7RTx8fl7gj0OtDXZDkqJflMg3sEIIdyQvskFkd5zcrNZWIdcDrD4cvL/AQQ0tlbbX8/cmJQla6VpmYzjv1IfllQTFF1m5KYxeQ3UJ3hs1Yw8qqCzUBGT+JcfhFIyQyozuisQA4aAOhbZNBDOwCtPKOrNoznQIwlrk/BWU9beoQ8eFcqaio6jJB6snQbrfpEjaCnqGzTkLuYGRkL/lFhGy6/20JVG9anbcPxrgXKEHcQKrMxVmceku/f8OyD+olIV5Zcj0wLOxAFB1uO8dvfqowkvAiZA+O3SgICUwhrHU70DNkN1SV4Gi66cD7GBp+dOAwzK8=
+
+before_install:
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - docker-compose --version
+
+install:
+  - docker pull ${BASE_IMAGE} || true
+  - docker build -t ${IMAGE_NAME} .
+  - docker images
+  - docker-compose --version
+
+before_script:
+  - docker-compose up -d
+  - docker-compose ps
+
+script:
+  - docker exec -ti tools-backend nox
+
+after_script:
+  - docker-compose down
+
+# after_success:
+  # - docker login -u "$docker_user" -p "$docker_pass"
+  # - docker tag back ${image_name}:$travis_build_number
+  # - docker push ${image_name}:$travis_build_number
+  # - docker tag back ${image_name}:latest
+  # - docker push ${image_name}:latest

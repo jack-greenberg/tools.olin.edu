@@ -1,0 +1,39 @@
+version: "3.8"
+services:
+  tools-backend:
+    build:
+      context: .
+    image: jackgreenberg/tools:latest
+    container_name: tools-backend
+    depends_on:
+      - tools-db
+    restart: always
+    tty: true
+    ports:
+      - "8000:5000"
+    volumes:
+      - .:/tools
+    networks:
+      - tools-net
+
+  tools-db:
+    container_name: tools-db
+    image: postgres:12.3
+    environment:
+      POSTGRES_DB: tools
+      POSTGRES_USER: tools
+      POSTGRES_PASSWORD: development
+    volumes:
+      - tools-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - tools-net
+
+networks:
+  tools-net:
+    name: tools-net
+
+volumes:
+  tools-data:
+    name: tools-data
