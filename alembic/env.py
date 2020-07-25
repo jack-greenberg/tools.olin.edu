@@ -43,8 +43,7 @@ def run_migrations_offline():
     connectable = create_engine(URL(**DATABASE_CONFIG))
     with connectable.connect() as conn:
         context.configure(
-            connection=conn,
-            target_metadata=target_metadata,
+            connection=conn, target_metadata=target_metadata,
         )
 
         with context.begin_transaction():
@@ -61,8 +60,7 @@ def run_migrations_online():
     connectable = create_engine(URL(**DATABASE_CONFIG))
     with connectable.connect() as conn:
         context.configure(
-            connection=conn,
-            target_metadata=target_metadata,
+            connection=conn, target_metadata=target_metadata,
         )
 
         with context.begin_transaction():
