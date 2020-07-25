@@ -1,21 +1,13 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Enum as EnumType
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from enum import Enum
 
 from tools.database import BASE
-
-
-class TrainingLevel(Enum):
-    BASIC = "Basic"
-    INTERMEDIATE = "Intermediate"
-    CNC = "CNC"
 
 
 class Tool(BASE):
     __tablename__ = "tool"
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    levels = relationship("ToolLevel")
     category_id = Column(Integer, ForeignKey("tool_category.id"))
     category = relationship("ToolCategory", back_populates="tools")
 
@@ -27,10 +19,11 @@ class ToolCategory(BASE):
     tools = relationship("Tool", back_populates="category")
 
 
-class ToolLevel(BASE):
-    __tablename__ = "tool_level"
-    id = Column(Integer, primary_key=True)
-    level = Column(EnumType(TrainingLevel))
-    tool_id = Column(Integer, ForeignKey("tool.id"))
-    prerequisite = Column(Integer, ForeignKey("tool_level.id"))
-    postrequisite = relationship("ToolLevel")
+# class ToolLevel(BASE):
+#     __tablename__ = "tool_level"
+#     id = Column(Integer, primary_key=True)
+#     level = Column(EnumType(TrainingLevel))
+#     tool_id = Column(Integer, ForeignKey("tool.id"), back_populates="levels")
+#     tool = relationship("Tool")
+#     prerequisite = Column(Integer, ForeignKey("tool_level.id"), nullable=True)
+#     postrequisite = relationship("ToolLevel") # child(ren) id(s)

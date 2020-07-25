@@ -59,10 +59,11 @@ class AddTool(Mutation):
 
     @staticmethod
     def mutate(self, info, **kwargs):
-        print(info, kwargs)
-        category_name = kwargs.get("category")
+        category_name = kwargs.pop("category")
+        #  levels = kwargs.pop("levels")
 
         new_tool = ToolModel(**kwargs)
+
         category = (
             g.db_session.query(ToolCategoryModel).filter_by(name=category_name).first()
         )
@@ -70,10 +71,13 @@ class AddTool(Mutation):
         if not category:
             category = ToolCategoryModel(name=category_name)
             g.db_session.add(category)
+            g.db_session.flush()
 
         new_tool.category = category
         g.db_session.add(new_tool)
-        return AddTool(tool=new_tool)
+        g.db_session.flush()
+
+        return new_tool
 
 
 class ToolMutation(ObjectType):
