@@ -4,16 +4,21 @@ from flask import Flask, request, g
 
 from tools.config import DevelopmentConfig
 from tools.routes import blueprints
-from tools.routes.errors import AppException
+from tools.errors import AppException
 from tools.database import BASE, ENGINE, Session
+from tools.auth import AuthHandler
 
 """
 Tools.Olin.Edu
 """
 
 
+class Application(Flask):
+    auth = AuthHandler()
+
+
 def make_app(config):
-    app = Flask(__name__)
+    app = Application(__name__)
     app.config.from_object(config)
 
     # Error handling
@@ -47,8 +52,6 @@ def make_app(config):
 
 def start_app(config):
     app = make_app(config)
-
-    app.logger.info("Starting app...")
     app.run("0.0.0.0")
 
 
