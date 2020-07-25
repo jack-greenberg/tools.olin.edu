@@ -1,7 +1,7 @@
 import pytest
 import json
 
-from tools.routes.errors import AppException
+from tools.errors import AppException
 
 
 def raise_exception():
