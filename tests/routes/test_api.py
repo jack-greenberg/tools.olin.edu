@@ -17,7 +17,7 @@ def test_current_user(app, client):
         with app.test_request_context():
             app.preprocess_request()
             response = client.post(
-                "/api/graphql",
+                "/graphql/",
                 data={
                     "query": """
                 query {

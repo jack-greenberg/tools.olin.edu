@@ -9,6 +9,8 @@ services:
       - tools-db
     restart: always
     tty: true
+    environment:
+      FLASK_SKIP_DOTENV: 1
     ports:
       - "8000:5000"
     volumes:
