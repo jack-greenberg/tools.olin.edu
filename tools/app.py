@@ -1,16 +1,21 @@
+import os
 import json
+import logging
 
 from flask import Flask, request, g
 
-from tools.config import DevelopmentConfig
+from tools.config import DevelopmentConfig, ProductionConfig
 from tools.routes import blueprints
 from tools.errors import AppException
-from tools.database import BASE, ENGINE, Session
+from tools.database import Session
 from tools.auth import AuthHandler
+from tools.config import AZURE_ENABLED
 
 """
 Tools.Olin.Edu
 """
+
+logger = logging.getLogger(__name__)
 
 
 class Application(Flask):
@@ -24,11 +29,17 @@ def make_app(config):
     # Error handling
     @app.errorhandler(AppException)
     def catch_exception(error):
+        if error.code >= 500:
+            logger.exception(f"Internal exception: {error.to_dict}")
+        else:
+            logger.info(f"{error.message}: {error.to_dict()}")
+
         error_dict = json.dumps(error.to_dict())
         return error_dict
 
     @app.before_request
     def before():
+        g.db_session = Session()
         if request.endpoint == "api.graphql":
             g.db_session = Session()
 
@@ -50,11 +61,14 @@ def make_app(config):
     return app
 
 
-def start_app(config):
+if __name__ == "__main__":
+    if os.getenv("ENV") == "production":
+        config = ProductionConfig
+    else:
+        config = DevelopmentConfig
+
+    if not AZURE_ENABLED:
+        logger.warning("Running without Azure")
+
     app = make_app(config)
     app.run("0.0.0.0")
-
-
-if __name__ == "__main__":
-    BASE.metadata.create_all(bind=ENGINE)
-    app = start_app(DevelopmentConfig)
