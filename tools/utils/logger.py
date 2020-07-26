@@ -1,22 +1,24 @@
 import logging
 from logging.config import dictConfig
 
-logging.getLogger("werkzeug").setLevel(logging.WARNING)
+format = "[%(asctime)s] %(levelname)s:%(module)s: %(message)s"
 
 dictConfig(
     {
         "version": 1,
-        "disable_existing_loggers": True,
-        "formatters": {
-            "default": {"format": "[%(asctime)s] %(levelname)s:%(module)s: %(message)s"}
-        },
+        "formatters": {"default": {"format": format}},
         "handlers": {
             "default": {
                 "class": "logging.StreamHandler",
                 "formatter": "default",
-                "level": logging.DEBUG,
-            }
+                "level": logging.INFO,
+            },
+            "_internal": {
+                "class": "logging.StreamHandler",
+                "formatter": "default",
+                "level": logging.WARNING,
+            },
         },
-        "root": {"level": logging.DEBUG, "handlers": ["default"]},
+        "root": {"level": logging.INFO, "handlers": ["default"]},
     }
 )
