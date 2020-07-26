@@ -1,27 +1,30 @@
-from sqlalchemy import Column, Integer, Enum
+from sqlalchemy import Column, Integer, Enum, String
 from tools.database import BASE
+
+# from sqlalchemy.orm import relationship
 
 from tools.utils import Role
 
 
-# class User(BASE):
-#     __tablename__ = "user"
-#     id = Column(Integer, primary_key=True)
-#     name = Column(String(255))
-#     email = Column(String(255))
-#
-#     # role = Column(Enum(Role, name="role"))
-#
-#     first_name = Column(String(255))
-#     last_name = Column(String(255))
-#     class_year = Column(Integer)
-#
-#     trainings = relationship(
-#         "Training",
-#         back_populates="user",
-#         innerjoin=True,
-#         lazy="select"
-#     )
+class User(BASE):
+    __tablename__ = "user"
+    id = Column(Integer, primary_key=True)
+    user_id = Column(String, primary_key=True)
+    name = Column(String(255))
+    email = Column(String(255))
+
+    role = Column(Enum(Role, name="role"))
+
+    first_name = Column(String(255))
+    last_name = Column(String(255))
+    class_year = Column(Integer)
+
+    # trainings = relationship(
+    #     "Training",
+    #     back_populates="user",
+    #     innerjoin=True,
+    #     lazy="select"
+    # )
 
 
 class UserRole(BASE):
