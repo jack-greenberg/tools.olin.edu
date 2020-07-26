@@ -9,3 +9,8 @@ class AppException(Exception):
         rv = dict(self.kwargs or ())
         rv["message"] = self.message
         return rv
+
+
+class AuthException(AppException):
+    def __init__(self, message, **kwargs):
+        AppException.__init__(self, message, 401, **kwargs)
