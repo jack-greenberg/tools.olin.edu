@@ -2,7 +2,7 @@ import os
 import json
 import logging
 
-from flask import Flask, request, g
+from flask import Flask, g
 
 from tools.config import DevelopmentConfig, ProductionConfig
 from tools.routes import blueprints
@@ -40,8 +40,6 @@ def make_app(config):
     @app.before_request
     def before():
         g.db_session = Session()
-        if request.endpoint == "api.graphql":
-            g.db_session = Session()
 
     @app.teardown_request
     def after(errors=None):
