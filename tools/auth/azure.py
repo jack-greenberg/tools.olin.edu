@@ -33,8 +33,7 @@ class AuthHandler(object):
         return self.client.get_authorization_request_url(
             scopes or ["User.ReadBasic.All"],
             state=state or str(uuid.uuid4()),
-            redirect_uri="http://localhost:8000/api/token",
-            # url_for("tools.index", _external=True)
+            redirect_uri=url_for("auth.token", _external=True),
         )
 
     def get_token(self, code, scopes, redirect_uri):
@@ -64,7 +63,7 @@ class AuthHandler(object):
             {
                 # Set the correct variable names
                 "email": response.pop("mail"),
-                "display_name": response.pop("display_name"),
+                "display_name": response.pop("displayName"),
                 "first_name": response.pop("givenName"),
                 "last_name": response.pop("surname"),
                 "user_id": response.pop("id"),

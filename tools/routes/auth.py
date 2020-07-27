@@ -21,33 +21,38 @@ def get_token():
         result = current_app.auth.get_token(
             code=request.args.get("code"),
             scopes=["User.ReadBasic.All"],
-            redirect_uri="http://localhost:8000/api/token",  # url_for("tools.index"),
+            redirect_uri=url_for("auth.token", _external=True),
         )
+
+        if "error" in result:
+            raise AuthException("Error retrieving login token", code=400)
 
         session["user"] = result.get("id_token_claims")
         session["access_token"] = result.get("access_token")
         session["refresh_token"] = result.get("refresh_token")
 
-        db_result = g.db_session.query(User).filter_by(
-            user_id=session["user"].get("id")
+        current_user = current_app.auth.get_current_user()
+        existing_user = (
+            g.db_session.query(User)
+            .filter_by(user_id=session["user"].get("oid"))
+            .first()
         )
 
-        if not db_result:
-            current_user = current_app.auth.get_current_user()
-
+        if not existing_user:
             new_user = User(
-                user_id=current_user.get("id"),
+                user_id=current_user.get("user_id"),
                 email=current_user.get("email"),
-                first_name=current_user.get("givenName"),
-                last_name=current_user.get("surname"),
+                first_name=current_user.get("first_name"),
+                last_name=current_user.get("last_name"),
                 role=Role.STUDENT,
             )
             g.db_session.add(new_user)
             g.db_session.flush()
+        else:
+            for key, value in current_user.items():
+                setattr(existing_user, key, value)
 
-    return redirect(
-        "http://localhost:8000/api/token"
-    )  # redirect(url_for("tools.index"))
+    return redirect(url_for("tools.index"))
 
 
 @AUTH.route("/logout")
