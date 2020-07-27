@@ -59,6 +59,17 @@ class AuthHandler(object):
             params={"$select": ",".join(selection)},
             headers=self.get_auth_headers(),
         ).json()
+
+        response.update(
+            {
+                # Set the correct variable names
+                "email": response.pop("mail"),
+                "display_name": response.pop("display_name"),
+                "first_name": response.pop("givenName"),
+                "last_name": response.pop("surname"),
+                "user_id": response.pop("id"),
+            }
+        )
         return response
 
     @staticmethod
