@@ -8,10 +8,8 @@ class Training(BASE):
     id = Column(Integer, primary_key=True)
     name = Column(String)
 
-    # user_id = Column(Integer, ForeignKey("user.id"))
-    # user = relationship("User", back_populates="trainings")
-    # tool_level_id = Column(Integer, ForeignKey("tool_level.id"))
-    # tool_level = relationship("ToolLevel")
+    tool_id = Column(Integer, ForeignKey("tool.id"))
+    tool = relationship("Tool")
 
     prerequisite = Column(Integer, ForeignKey("training.id"), nullable=True)
     postrequisite = relationship("Training")

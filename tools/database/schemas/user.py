@@ -1,6 +1,4 @@
-import requests
-
-from flask import current_app, session, g
+from flask import session, g
 from graphene import Mutation, List, ObjectType, String, Field, ID, Enum
 
 from tools.utils import Role as RoleEnum
@@ -15,7 +13,7 @@ MICROSOFT_GRAPH = "https://graph.microsoft.com/v1.0"
 class User(ObjectType):
     id = ID()
     user_id = String()
-    mail = String()
+    email = String()
 
     first_name = String()
     last_name = String()
@@ -31,7 +29,7 @@ class UserQuery(ObjectType):
     Example:
     query {
         user (
-            id: "asdf-1234567890-asdfhjjkl"
+            id: 1
         ) {
             id
             givenName
@@ -45,21 +43,17 @@ class UserQuery(ObjectType):
     users = List(User)
 
     def resolve_me(self, info):
-        user_id = session.get("user").get("oid")
-        user = g.db_session.query(UserModel).filter_by(user_id=user_id).first()
+        my_id = session.get("user").get("oid")
+        me = g.db_session.query(UserModel).filter_by(user_id=my_id).first()
+        return me
+
+    def resolve_user(self, info, id=None):  # id or user_id?
+        user = g.db_session.query(UserModel).filter_by(id=id).first()
         return user
 
-    def resolve_user(self, info, id=None):
-        selection = ["id", "displayName", "mail", "givenName", "surname"]
-        response = requests.get(
-            MICROSOFT_GRAPH + "/user/{id}".format(id=id),
-            params={"$select": ",".join(selection)},
-            headers=current_app.auth.get_auth_headers(),
-        ).json()
-        return response
-
     def resolve_users(self, info):
-        pass
+        users = g.db_session.query(UserModel).all()
+        return users
 
 
 ###########
@@ -74,15 +68,13 @@ class UpdateUserRole(Mutation):
 
     @staticmethod
     def mutate(self, info, **kwargs):
-        pass
-        # id = kwargs.pop("id")
-        # kwargs["role"] = Role(kwargs["role"])
-        # user = g.db_session.query(UserModel).get(id)
-        # for key, value in kwargs.items():
-        #     setattr(user, key, value)
-        # return user
+        id = kwargs.pop("id")
+        kwargs["role"] = RoleEnum(kwargs["role"])
+        user = g.db_session.query(UserModel).get(id)
+        for key, value in kwargs.items():
+            setattr(user, key, value)
+        return user
 
 
 class UserMutation(ObjectType):
     update_user_role = UpdateUserRole.Field()
-    # add_user = AddUser.Field()
