@@ -36,7 +36,9 @@ after_script:
   - docker-compose down
 
 notifications:
-  - webhooks: https://api.opsgenie.com/v1/json/travisci?apiKey=53538a56-c47b-44fd-9111-d69f9148b347
+  webhooks:
+    - https://api.opsgenie.com/v1/json/travisci?apiKey=53538a56-c47b-44fd-9111-d69f9148b347
+    - https://fathomless-fjord-24024.herokuapp.com/notify
 # after_success:
   # - docker login -u "$docker_user" -p "$docker_pass"
   # - docker tag back ${image_name}:$travis_build_number
