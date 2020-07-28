@@ -33,7 +33,7 @@ class AuthHandler(object):
         return self.client.get_authorization_request_url(
             scopes or ["User.ReadBasic.All"],
             state=state or str(uuid.uuid4()),
-            redirect_uri=url_for("auth.token", _external=True),
+            redirect_uri=url_for("auth.get_token", _external=True),
         )
 
     def get_token(self, code, scopes, redirect_uri):
@@ -58,7 +58,7 @@ class AuthHandler(object):
             params={"$select": ",".join(selection)},
             headers=self.get_auth_headers(),
         ).json()
-
+        print(response)
         response.update(
             {
                 # Set the correct variable names

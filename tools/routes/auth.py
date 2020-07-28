@@ -21,7 +21,7 @@ def get_token():
         result = current_app.auth.get_token(
             code=request.args.get("code"),
             scopes=["User.ReadBasic.All"],
-            redirect_uri=url_for("auth.token", _external=True),
+            redirect_uri=url_for("auth.get_token", _external=True),
         )
 
         if "error" in result:
@@ -44,6 +44,7 @@ def get_token():
                 email=current_user.get("email"),
                 first_name=current_user.get("first_name"),
                 last_name=current_user.get("last_name"),
+                display_name=current_user.get("display_name"),
                 role=Role.STUDENT,
             )
             g.db_session.add(new_user)

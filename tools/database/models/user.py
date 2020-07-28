@@ -9,11 +9,11 @@ class User(BASE):
     __tablename__ = "user"
     id = Column(Integer, primary_key=True)
     user_id = Column(String)
-    name = Column(String(255))
     email = Column(String(255))
 
     role = Column(Enum(Role, name="role"))
 
+    display_name = Column(String(255))
     first_name = Column(String(255))
     last_name = Column(String(255))
     class_year = Column(Integer)
