@@ -58,7 +58,6 @@ class AuthHandler(object):
             params={"$select": ",".join(selection)},
             headers=self.get_auth_headers(),
         ).json()
-        print(response)
         response.update(
             {
                 # Set the correct variable names
