@@ -4,7 +4,7 @@ from sqlalchemy.engine.url import URL
 
 from tools.app import make_app
 from tools.config import ProductionConfig, DATABASE_CONFIG
-from tools.database.models import *  # noqa
+from tools.database.models import User, Training, Tool
 from tools.database import Session, BASE
 
 
@@ -45,3 +45,32 @@ def db_session(db):
         yield session
     finally:
         session.close()
+
+
+def mock_user(id, db_session=None):
+    u = User(id=id)
+    db_session.add(u)
+    db_session.flush()
+    db_session.commit()
+    return u
+
+
+def mock_tool(id, db_session=None):
+    t = Tool(id=id)
+    db_session.add(t)
+    db_session.flush()
+    db_session.commit()
+    return t
+
+
+def mock_training(id, tool, pre=None, db_session=None):
+    tr = Training(id=id)
+    tr.tool = tool
+
+    if pre:
+        tr.prerequisite = pre
+
+    db_session.add(tr)
+    db_session.flush()
+    db_session.commit()
+    return tr

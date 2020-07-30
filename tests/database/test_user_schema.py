@@ -1,5 +1,6 @@
 from tools.database.models import User
 from tools.utils import Role
+from tests.conftest import mock_user, mock_tool, mock_training
 
 
 def test_session(db_session):
@@ -18,3 +19,12 @@ def test_session(db_session):
     result = db_session.query(User).filter_by(user_id="12345-67890-asdfhjkl").first()
 
     assert user.user_id == result.user_id
+
+
+def test_mocks(db_session):
+    u = mock_user(1, db_session)
+    t = mock_tool(1, db_session)
+    tr = mock_training(1, t, db_session=db_session)
+    assert u in db_session
+    assert tr.tool is t
+    assert u.id == 1
