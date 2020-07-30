@@ -18,6 +18,21 @@ services:
     networks:
       - tools-net
 
+  tools-web:
+    build:
+      context: ./web
+    image: jackgreenberg/tools-web:latest
+    container_name: tools-web
+    depends_on:
+      - tools-db
+    tty: true
+    volumes:
+      - ./web:/web
+    networks:
+      - tools-net
+    ports:
+      - "3000:3000"
+
   tools-db:
     container_name: tools-db
     image: postgres:12.3
