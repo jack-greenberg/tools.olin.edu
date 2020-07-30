@@ -1,4 +1,4 @@
-from graphene import Mutation, ObjectType, List, ID
+from graphene import Mutation, ObjectType, Field, List, ID, Int
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
 from ..models import Training as TrainingModel
@@ -19,9 +19,13 @@ Queries
 
 
 class TrainingQuery(ObjectType):
-    trainings_for_user = List(Training)
+    training = Field(Training, id=Int(required=True))
+    trainings = List(Training)
 
-    def resolve_trainings_for_user(self, info, **kwargs):
+    def resolve_training(self, info, id=None, **kwargs):
+        pass
+
+    def resolve_trainings(self, info, **kwargs):
         pass
 
 

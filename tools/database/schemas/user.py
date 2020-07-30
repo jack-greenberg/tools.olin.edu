@@ -1,8 +1,9 @@
 from flask import session, g
-from graphene import Mutation, List, ObjectType, String, Field, ID, Enum
+from graphene import Mutation, List, ObjectType, String, Int, Field, ID, Enum
+from graphene_sqlalchemy import SQLAlchemyObjectType
 
 from tools.utils import Role as RoleEnum
-from tools.database.models import User as UserModel
+from tools.database.models import User as UserModel, UserTraining as UserTrainingModel
 
 Role = Enum.from_enum(RoleEnum)
 MICROSOFT_GRAPH = "https://graph.microsoft.com/v1.0"
@@ -10,15 +11,26 @@ MICROSOFT_GRAPH = "https://graph.microsoft.com/v1.0"
 #########
 # Schemas
 #########
+
+
+class UserTraining(SQLAlchemyObjectType):
+    class Meta:
+        model = UserTrainingModel
+
+
 class User(ObjectType):
     id = ID()
     user_id = String()
     email = String()
 
+    role = Role()
+
+    display_name = String()
     first_name = String()
     last_name = String()
-    display_name = String()
-    role = Role()
+    class_year = Int()
+
+    trainings = List(UserTraining)
 
 
 #########
@@ -74,6 +86,16 @@ class UpdateUserRole(Mutation):
         for key, value in kwargs.items():
             setattr(user, key, value)
         return user
+
+
+class NewUserTraining(Mutation):
+    class Arguments:
+        user_id = ID(required=True)
+        training_id = ID(required=True)
+
+    @staticmethod
+    def mutate(self, info, **kwargs):
+        pass
 
 
 class UserMutation(ObjectType):
