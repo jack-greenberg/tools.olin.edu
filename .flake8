@@ -1,6 +1,25 @@
 [flake8]
 select = C,E,F,W
+
 max-complexity = 10
-exclude = .git,__pycache__,docs/source/conf.py,old,build,dist,alembic
+
+exclude =
+    .git
+    __pycache__
+    old
+    docs
+    .pytest_cache
+    build
+    dist
+    alembic
+    scripts
+    .nox
+    tools.egg-info
+
 max-line-length = 88
-ignore = E126,E121,E302,W503
+
+ignore =
+    E126
+    E121
+    E302
+    W503
