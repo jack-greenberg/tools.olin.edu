@@ -2,12 +2,12 @@ from graphene import Schema as BaseSchema
 
 from .user import UserQuery, UserMutation
 from .tool import ToolQuery, ToolMutation
-from .training import TrainingMutation
+from .training import TrainingQuery, TrainingMutation
 
 __all__ = ["AppSchema"]
 
 
-class BaseQuery(UserQuery, ToolQuery):
+class BaseQuery(UserQuery, ToolQuery, TrainingQuery):
     pass
 
 

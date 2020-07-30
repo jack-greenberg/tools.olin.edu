@@ -7,6 +7,7 @@ from tools.utils import Role
 
 class User(BASE):
     __tablename__ = "user"
+
     id = Column(Integer, primary_key=True)
     user_id = Column(String)
     email = Column(String(255))
@@ -27,6 +28,7 @@ class UserTraining(BASE):
     __tablename__ = "user_training"
     id = Column(Integer, primary_key=True)
     training_id = Column(Integer, ForeignKey("training.id"))
+    training = relationship("Training")
 
     user_id = Column(Integer, ForeignKey("user.id"))
     user = relationship("User")
