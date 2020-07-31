@@ -1,9 +1,7 @@
 # Tools.Olin
+[![Build Status](https://img.shields.io/travis/jack-greenberg/tools.olin.edu.svg?logo=travis)](https://travis-ci.org/jack-greenberg/tools.olin.edu)
+
 Web application for maintaining machine shop trainings at Olin College.
-
-[![Build Status](https://travis-ci.org/jack-greenberg/tools.olin.edu.svg?branch=main)](https://travis-ci.org/jack-greenberg/tools.olin.edu)
-
-
 
 [Check it out here :sunglasses:](https://tools.olin.edu)
 
