@@ -44,6 +44,7 @@ def test_user_trainings(app, client, db_session):
                         id
                         trainings {
                             training {
+                                id
                                 tool {
                                     id
                                 }
@@ -60,6 +61,8 @@ def test_user_trainings(app, client, db_session):
         assert data["data"] == {
             "addUserTraining": {
                 "id": "1",
-                "trainings": [{"training": {"tool": {"id": "1"}}}],
+                "trainings": [
+                    {"training": {"id": "%s" % training.id, "tool": {"id": "1"}}}
+                ],
             }
         }
