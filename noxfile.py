@@ -7,8 +7,7 @@ nox.options.sessions = "lint", "safety", "tests"
 
 @nox.session(python=["3.7"])
 def tests(session):
-    #  args = session.posargs or ["--cov"]
-    args = session.posargs
+    args = ["-ra", "--cov", "-cpyproject.toml"]
     session.run("pytest", *args, external=True)
 
 

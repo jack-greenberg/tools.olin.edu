@@ -42,6 +42,11 @@ source = ["tools"]
 [tool.coverage.report]
 show_missing = true
 
+[tool.pytest.ini_options]
+norecursedirs = [".git", "build", "node_modules"]
+testpaths = ["tests"]
+
+
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
