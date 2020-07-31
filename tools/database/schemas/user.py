@@ -93,10 +93,19 @@ class NewUserTraining(Mutation):
         user_id = ID(required=True)
         training_id = ID(required=True)
 
+    Output = User
+
     @staticmethod
     def mutate(self, info, **kwargs):
-        pass
+        user_id = kwargs.pop("user_id")
+        training_id = kwargs.pop("training_id")
+        user_training = UserTrainingModel(user_id=user_id, training_id=training_id)
+        user = g.db_session.query(UserModel).filter_by(id=user_id).first()
+        user.trainings.append(user_training)
+        g.db_session.flush()
+        return user
 
 
 class UserMutation(ObjectType):
     update_user_role = UpdateUserRole.Field()
+    add_user_training = NewUserTraining.Field()
