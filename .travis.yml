@@ -31,6 +31,7 @@ before_script:
 
 script:
   - docker exec -ti tools-backend nox
+  - docker exec -ti tools-backend coverage xml --fail-under=0
 
 after_script:
   - docker-compose down
