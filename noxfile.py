@@ -39,3 +39,10 @@ def safety(session):
         )
         session.install("safety")
         session.run("safety", "check", f"--file={requirements.name}", "--full-report")
+
+
+@nox.session(python="3.7")
+def coverage(session):
+    """Upload coverage data."""
+    session.run("coverage", "xml", "--fail-under=0")
+    session.run("codecov", *session.posargs)

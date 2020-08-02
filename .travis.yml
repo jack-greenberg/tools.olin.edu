@@ -30,7 +30,7 @@ before_script:
   - docker-compose ps
 
 script:
-  - docker exec -ti tools-backend nox
+  - docker exec -ti tools-backend nox -rs tests lint safety coverage
   - docker exec -ti tools-backend coverage xml --fail-under=0
 
 after_script:
@@ -42,9 +42,3 @@ after_success:
 notifications:
   webhooks:
     - https://fathomless-fjord-24024.herokuapp.com/notify
-# after_success:
-  # - docker login -u "$docker_user" -p "$docker_pass"
-  # - docker tag back ${image_name}:$travis_build_number
-  # - docker push ${image_name}:$travis_build_number
-  # - docker tag back ${image_name}:latest
-  # - docker push ${image_name}:latest
