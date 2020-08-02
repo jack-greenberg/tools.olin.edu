@@ -1,11 +1,9 @@
 from flask import session, g
 from graphene import Mutation, List, ObjectType, String, Int, Field, ID, Enum, Argument
 from graphene_sqlalchemy import SQLAlchemyObjectType
-from sqlalchemy.sql.expression import and_
 
 from tools.utils import Role as RoleEnum, TrainingStatus as TrainingStatusEnum
 from tools.database.models import User as UserModel, UserTraining as UserTrainingModel
-from tools.database.schemas.training import Training
 
 Role = Enum.from_enum(RoleEnum)
 TrainingStatus = Enum.from_enum(TrainingStatusEnum)
@@ -97,9 +95,7 @@ class NewUserTraining(Mutation):
     Output = User
 
     def mutate(self, info, **kwargs):
-        print(kwargs)
         user_id = kwargs.get("user_id")
-        training_id = kwargs.get("training_id")
         kwargs["status"] = TrainingStatusEnum.STARTED
         user_training = UserTrainingModel(**kwargs)
         user = g.db_session.query(UserModel).filter_by(id=user_id).first()
@@ -118,7 +114,9 @@ class UpdateTrainingStatus(Mutation):
 
     def mutate(self, info, **kwargs):
         new_status = TrainingStatusEnum(kwargs.pop("status", None))
-        user_training = g.db_session.query(UserTrainingModel).filter_by(**kwargs).first()
+        user_training = (
+            g.db_session.query(UserTrainingModel).filter_by(**kwargs).first()
+        )
         setattr(user_training, "status", new_status)
         return user_training
 
