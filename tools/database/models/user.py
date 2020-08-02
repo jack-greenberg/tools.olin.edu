@@ -1,8 +1,10 @@
+import enum
+
 from sqlalchemy import Column, Integer, Enum, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 from tools.database import BASE
-from tools.utils import Role
+from tools.utils import Role, TrainingStatus
 
 
 class User(BASE):
@@ -31,4 +33,6 @@ class UserTraining(BASE):
     training = relationship("Training")
 
     user_id = Column(Integer, ForeignKey("user.id"))
-    user = relationship("User")
+    user = relationship("User", back_populates="trainings")
+
+    status = Column(Enum(TrainingStatus))
