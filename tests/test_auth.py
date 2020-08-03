@@ -3,6 +3,7 @@ import pytest
 from unittest.mock import patch
 
 from msal import ConfidentialClientApplication
+from flask import url_for
 
 from tools.auth import AuthHandler
 from tools.errors import AuthException
@@ -33,12 +34,7 @@ def test_auth_client(app):
     assert isinstance(app.auth.client, ConfidentialClientApplication)
 
     with app.test_request_context():
-        assert app.auth.get_logout_url() == (
-            "https://login.microsoftonline.com/"
-            "ff6254d0-4690-468a-a4ad-828ace3bb668"
-            "/oauth2/v2.0/logout?"
-            "post_logout_redirect_uri=http://localhost:8000/"
-        )
+        assert app.auth.get_logout_url().endswith(url_for("tools.index"))
 
 
 def test_auth_process(app, client):
