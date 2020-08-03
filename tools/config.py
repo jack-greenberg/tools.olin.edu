@@ -27,20 +27,20 @@ class ProductionConfig(BaseConfig):
 
 DATABASE_CONFIG = {
     "drivername": "postgresql",
-    "host": "tools-db",
+    "host": os.getenv("POSTGRES_HOST", "tools-db")
     "port": "5432",
-    "username": "tools",
-    "password": "development",
-    "database": "tools",
+    "username": os.getenv("POSTGRES_USER", "tools"),
+    "password": os.getenv("POSTGRES_PASSWORD", "development"),
+    "database": os.getenv("POSTGRES_DB", "tools"),
 }
 
-AZURE_APPLICATION_ID = os.getenv("AZURE_APPLICATION_ID", None)
-AZURE_TENANT_ID = os.getenv("AZURE_TENANT_ID", None)
-AZURE_CLIENT_SECRET = os.getenv("AZURE_CLIENT_SECRET", None)
+AZURE_APPLICATION_ID = os.getenv("AZURE_APPLICATION_ID", "")
+AZURE_TENANT_ID = os.getenv("AZURE_TENANT_ID", "")
+AZURE_CLIENT_SECRET = os.getenv("AZURE_CLIENT_SECRET", "")
 AZURE_AUTHORITY = (
     ("https://login.microsoftonline.com/" + AZURE_TENANT_ID)
     if AZURE_TENANT_ID
-    else None
+    else ""
 )
 AZURE_ENABLED = all(
     [AZURE_APPLICATION_ID, AZURE_TENANT_ID, AZURE_CLIENT_SECRET, AZURE_AUTHORITY]
