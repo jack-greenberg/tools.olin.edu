@@ -53,6 +53,10 @@ def get_token():
             for key, value in current_user.items():
                 setattr(existing_user, key, value)
 
+        # This is authed, so could return to /dashboard or something
+        return redirect(url_for("tools.index"))
+
+    # Unauthed, go back to homepage
     return redirect(url_for("tools.index"))
 
 

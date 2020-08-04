@@ -53,32 +53,31 @@ class AuthHandler(object):
 
     def get_current_user(self):
         selection = ["id", "displayName", "mail", "givenName", "surname"]
+        # TODO: Wrap in error handling
         response = requests.get(
             "https://graph.microsoft.com/v1.0/me/",
             params={"$select": ",".join(selection)},
             headers=self.get_auth_headers(),
         ).json()
-        response.update(
-            {
-                # Set the correct variable names
-                "email": response.pop("mail"),
-                "display_name": response.pop("displayName"),
-                "first_name": response.pop("givenName"),
-                "last_name": response.pop("surname"),
-                "user_id": response.pop("id"),
-            }
-        )
-        return response
+
+        return {
+            # Set the correct variable names
+            "email": response.pop("mail"),
+            "display_name": response.pop("displayName"),
+            "first_name": response.pop("givenName"),
+            "last_name": response.pop("surname"),
+            "user_id": response.pop("id"),
+        }
 
     @staticmethod
     def get_auth_headers():
         return {"Authorization": "Bearer " + session["access_token"]}
 
 
-def authed(f):
-    def wrapped(*args, **kwargs):
-        if not session.get("user"):
-            raise AuthException("User not logged in")
-        return f(*args, **kwargs)
-
-    return wrapped
+#  def authed(f):
+#      def wrapped(*args, **kwargs):
+#          if not session.get("user"):
+#              raise AuthException("User not logged in")
+#          return f(*args, **kwargs)
+#
+#      return wrapped
