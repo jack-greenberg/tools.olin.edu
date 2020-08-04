@@ -24,6 +24,7 @@ services:
   tools-db:
     container_name: tools-db
     image: postgres:12.3
+    restart: always
     environment:
       POSTGRES_DB: tools
       POSTGRES_USER: tools
