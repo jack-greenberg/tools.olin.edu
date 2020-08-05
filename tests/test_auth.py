@@ -1,14 +1,16 @@
 import uuid
 import pytest
+import json
 from unittest.mock import patch
 import responses
 
 from msal import ConfidentialClientApplication
-from flask import url_for, session, g
+from flask import url_for, session, get_flashed_messages
 
 from tools.auth import AuthHandler
 from tools.errors import AuthException
 from tools.database.models import User
+from tests.conftest import mock_user
 
 
 def test_unauthed_homepage(app, client):
@@ -20,15 +22,6 @@ def test_unauthed_homepage(app, client):
         assert response.status_code == 200
         body = response.data
         assert b"Click to log in" in body
-
-        with client.session_transaction() as session:
-            session["user"] = {"name": "Jane"}
-
-        response = client.get("/")
-        assert response.status_code == 200
-
-        # This will change when we start rendering templates
-        assert response.data == b"Welcome Jane!"
 
 
 def test_auth_client(app):
@@ -79,7 +72,11 @@ def test_auth_process(app, client, db_session):
             "acquire_token_by_authorization_code",
             return_value={
                 "access_token": str(token),
-                "id_token_claims": {"oid": "ac19540c-210b-ff37-asdf-10293abfe9se"},
+                "id_token_claims": {
+                    "oid": "ac19540c-210b-ff37-asdf-10293abfe9se",
+                    "name": "Ada",
+                    "mail": "alovelace@olin.edu",
+                },
                 "refresh_token": "refresh_token",
             },
         ) as mock_method:
@@ -87,7 +84,6 @@ def test_auth_process(app, client, db_session):
                 sess["state"] = "test_state"
 
             # This would be a request from Microsoft to tools.olin.edu
-            g.db_session = db_session
             with client:
                 response = client.get(
                     "/auth/token",
@@ -101,13 +97,24 @@ def test_auth_process(app, client, db_session):
                     session["user"].get("oid") == "ac19540c-210b-ff37-asdf-10293abfe9se"
                 )
 
+                # Now the homepage displays a custom message
+                response = client.get("/")
+                assert b"Welcome Ada" in response.data
+
+                # Logout
+                response = client.get("/auth/logout")
+                assert session.get("user") is None
+                assert response.status_code == 302
+                assert response.headers["location"] == app.auth.get_logout_url()
+
+            # User should be saved in the database
             assert (
                 db_session.query(User).first().user_id
                 == "ac19540c-210b-ff37-asdf-10293abfe9se"
             )
 
 
-def test_auth_failure(app):
+def test_auth_failure(app, client):
     with patch.object(
         ConfidentialClientApplication,
         "acquire_token_by_authorization_code",
@@ -116,15 +123,29 @@ def test_auth_failure(app):
         with pytest.raises(AuthException):
             app.auth.get_token("mock_code", ["Scope"], "some_url")
 
+        resp = client.get("/auth/token", query_string={"code": "code"})
+        assert {
+            "message": "Error acquiring token: some error",
+            "code": 401,
+        } == json.loads(resp.data)
 
-@pytest.mark.skip
-def test_unauthed_path():
-    pass
+    resp = client.get("/auth/token", query_string={"error": "Could not retrieve token"})
+    assert json.loads(resp.data) == {
+        "message": "Exception in auth process: Could not retrieve token",
+        "code": 500,
+    }
 
+    # State failure
+    with client.session_transaction() as sess:
+        sess["state"] = "state"
 
-@pytest.mark.skip
-def test_invalid_auth_request():
-    pass
+    response = client.get("/auth/token", query_string={"state": "wrong_state"})
+    assert response.status_code == 400
+
+    with client:
+        response = client.get("/auth/token", query_string={"state": "state"})
+        assert {"code": 400, "message": "No code provided"} == json.loads(response.data)
+        assert "No code provided" in get_flashed_messages()
 
 
 @responses.activate
@@ -160,3 +181,65 @@ def test_get_current_user(app):
             "last_name": "Lovelace",
             "user_id": "ac19540c-210b-ff37-asdf-10293abfe9se",
         }
+
+
+@responses.activate
+def test_existing_user(app, client, db_session):
+    """
+    User already exists, but they have a new email for some reason
+    """
+    mock_user(
+        1,
+        db_session,
+        user_id="ac19540c-210b-ff37-asdf-10293abfe9se",
+        email="alovelace@olin.edu",
+    )
+    responses.add(
+        responses.GET,
+        "https://graph.microsoft.com/v1.0/me/",
+        match_querystring=False,
+        json={
+            "businessPhones": [],
+            "displayName": "Ada Lovelace",
+            "givenName": "Ada",
+            "jobTitle": None,
+            "mail": "Ada.Lovelace@olin.edu",
+            "mobilePhone": None,
+            "officeLocation": None,
+            "preferredLanguage": None,
+            "surname": "Lovelace",
+            "userPrincipalName": "Ada.Lovelace@olin.edu",
+            "id": "ac19540c-210b-ff37-asdf-10293abfe9se",
+        },
+    )
+
+    with app.test_request_context():
+        # Get a token, mock out the acquire_token thing
+        token = uuid.uuid4()
+        with patch.object(
+            ConfidentialClientApplication,
+            "acquire_token_by_authorization_code",
+            return_value={
+                "access_token": str(token),
+                "id_token_claims": {
+                    "oid": "ac19540c-210b-ff37-asdf-10293abfe9se",
+                    "name": "Ada",
+                    "mail": "Ada.Lovelace@olin.edu",
+                },
+                "refresh_token": "refresh_token",
+            },
+        ):
+            with client.session_transaction() as sess:
+                sess["state"] = "test_state"
+
+            client.get(
+                "/auth/token",
+                query_string={
+                    "state": "test_state",
+                    "access_token": str(token),
+                    "code": "test_code",
+                },
+            )
+
+            # User should be updated in the database
+            assert db_session.query(User).first().email == "Ada.Lovelace@olin.edu"

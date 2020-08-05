@@ -47,8 +47,8 @@ def db_session(db):
         session.close()
 
 
-def mock_user(id, db_session=None):
-    u = User(id=id)
+def mock_user(id, db_session=None, **kwargs):
+    u = User(id=id, **kwargs)
     db_session.add(u)
     db_session.flush()
     db_session.commit()
