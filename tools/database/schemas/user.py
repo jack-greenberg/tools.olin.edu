@@ -53,8 +53,10 @@ class UserQuery(ObjectType):
     user = Field(User, id=ID(required=True))
     users = List(User)
 
+    # TODO: add @authed. There's an issue where if you make a request,
+    # it just says "Nonetype is not subscriptable" which isn't useful
     def resolve_me(self, info):
-        my_id = session.get("user").get("oid")
+        my_id = session.get("user")["oid"]
         me = g.db_session.query(UserModel).filter_by(user_id=my_id).first()
         return me
 
