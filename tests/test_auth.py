@@ -105,7 +105,8 @@ def test_auth_process(app, client, db_session):
                 response = client.get("/auth/logout")
                 assert session.get("user") is None
                 assert response.status_code == 302
-                assert response.headers["location"] == app.auth.get_logout_url()
+                # Needs to be `in` in case the AZURE_TENANT_ID isn't set
+                assert app.auth.get_logout_url() in response.headers["location"]
 
             # User should be saved in the database
             assert (
