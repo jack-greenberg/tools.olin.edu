@@ -30,19 +30,20 @@ class ToolQuery(ObjectType):
     tools_by_category = List(Tool, category=String(required=True))
 
     @staticmethod
-    def resolve_tool(self, info, id):
-        query = Tool.get_query(info).filter_by(id=id)
-        return query.first()
+    def resolve_tool(self, info, id=0):
+        return g.db_session.query(ToolModel).filter_by(id=id).first()
 
     @staticmethod
     def resolve_tools(self, info):
-        query = Tool.get_query(info)
-        return query.all()
+        return g.db_session.query(ToolModel).all()
 
     @staticmethod
     def resolve_tools_by_category(self, info, category):
-        query = Tool.get_query(info).filter(ToolModel.category.has(name=category))
-        return query.all()
+        return (
+            g.db_session.query(ToolModel)
+            .filter(ToolModel.category.has(name=category))
+            .all()
+        )
 
 
 """
@@ -59,9 +60,9 @@ class AddTool(Mutation):
 
     @staticmethod
     def mutate(self, info, **kwargs):
+        # TODO: name to lower case and underscores for commas,
+        # both for tool and category
         category_name = kwargs.pop("category")
-        #  levels = kwargs.pop("levels")
-
         new_tool = ToolModel(**kwargs)
 
         category = (
@@ -71,7 +72,6 @@ class AddTool(Mutation):
         if not category:
             category = ToolCategoryModel(name=category_name)
             g.db_session.add(category)
-            g.db_session.flush()
 
         new_tool.category = category
         g.db_session.add(new_tool)

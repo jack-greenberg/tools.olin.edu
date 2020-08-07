@@ -4,7 +4,7 @@ from sqlalchemy.engine.url import URL
 
 from tools.app import make_app
 from tools.config import ProductionConfig, DATABASE_CONFIG
-from tools.database.models import User, Training, Tool
+from tools.database.models import User, Training, Tool, ToolCategory
 from tools.database import Session, BASE
 
 
@@ -55,8 +55,14 @@ def mock_user(id, db_session=None, **kwargs):
     return u
 
 
-def mock_tool(id, db_session=None):
-    t = Tool(id=id)
+def mock_tool(id, db_session=None, **kwargs):
+    category_name = kwargs.pop("category", None)
+
+    t = Tool(id=id, **kwargs)
+    if category_name:
+        category = ToolCategory(name=category_name)
+        t.category = category
+
     db_session.add(t)
     db_session.flush()
     db_session.commit()
