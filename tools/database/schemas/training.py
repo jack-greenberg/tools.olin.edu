@@ -1,7 +1,8 @@
-from graphene import Mutation, ObjectType, Field, List, ID, Int
+from flask import g
+from graphene import Mutation, ObjectType, Field, List, Int, String
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
-from ..models import Training as TrainingModel
+from ..models import Training as TrainingModel, Tool as ToolModel
 
 """
 Schemas
@@ -36,16 +37,29 @@ Mutations
 
 class AddTraining(Mutation):
     class Arguments:
-        user_id = ID(required=True)
-        tool_level_id = ID(required=True)
+        tool_id = Int()
+        tool_ids = List(Int)
+
+        name = String()
+        prerequisite_id = Int(required=False)
 
     Output = Training
 
     @staticmethod
     def mutate(self, info, **kwargs):
-        #  user_id = kwargs.pop("user_id")
-        #  tool_id = kwargs.pop("tool_id")
-        pass
+        prereq_id = kwargs.pop("prerequisite_id", None)
+
+        tool_ids = kwargs.pop("tool_ids", None) or [kwargs.pop("tool_id", None)]
+        tools = g.db_session.query(ToolModel).filter(ToolModel.id.in_(tool_ids)).all()
+
+        training = TrainingModel(**kwargs)
+        training.tools = tools
+
+        if prereq_id:
+            prereq = g.db_session.query(TrainingModel).filter_by(id=prereq_id).first()
+            training.prerequisite = prereq
+
+        return training
 
 
 class TrainingMutation(ObjectType):

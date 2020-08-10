@@ -69,9 +69,9 @@ def mock_tool(id, db_session=None, **kwargs):
     return t
 
 
-def mock_training(id, tool, pre=None, db_session=None):
-    tr = Training(id=id)
-    tr.tool = tool
+def mock_training(id, db_session=None, tools=None, pre=None, **kwargs):
+    tr = Training(id=id, **kwargs)
+    tr.tools = tools
 
     if pre:
         tr.prerequisite = pre
