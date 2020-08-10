@@ -24,7 +24,7 @@ def test_session(db_session):
 def test_mocks(db_session):
     u = mock_user(1, db_session)
     t = mock_tool(1, db_session)
-    tr = mock_training(1, t, db_session=db_session)
+    tr = mock_training(1, db_session=db_session, tools=[t])
     assert u in db_session
-    assert tr.tool is t
+    assert tr.tools == [t]
     assert u.id == 1
