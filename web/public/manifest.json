@@ -1,9 +1,9 @@
 {
-  "short_name": "Tools.Olin",
-  "name": "Olin Machine Shop Training Site",
-  "icons": [],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+	"short_name": "Tools.Olin",
+	"name": "Olin Machine Shop Training Site",
+	"icons": [],
+	"start_url": ".",
+	"display": "standalone",
+	"theme_color": "#000000",
+	"background_color": "#ffffff"
 }

@@ -1,6 +1,7 @@
 {
   "name": "tools-web",
   "version": "1.0.0",
+  "type": "module",
   "private": false,
   "scripts": {
     "start": "react-scripts start",
@@ -36,6 +37,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "rome": "^10.0.3-beta"
   }
 }
