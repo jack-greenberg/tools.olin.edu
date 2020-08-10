@@ -44,7 +44,7 @@ source = ["tools"]
 show_missing = true
 
 [tool.pytest.ini_options]
-norecursedirs = [".git", "build", "node_modules"]
+norecursedirs = [".git", "build", "node_modules", "web"]
 testpaths = ["tests"]
 
 

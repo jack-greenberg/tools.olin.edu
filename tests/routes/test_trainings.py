@@ -36,7 +36,7 @@ def test_new_training_prerequisite(client, db_session):
         "data": {
             "addTraining": {
                 "name": "Intermediate Lathe Training",
-                "tools": [{"name": "Lathe", "category": {"name": "MetalWorking",}},],
+                "tools": [{"name": "Lathe", "category": {"name": "MetalWorking"}}],
                 "prerequisite": {"name": "Fundamental Lathe Training"},
             }
         }
@@ -76,9 +76,9 @@ def test_new_multitool_training(client, db_session):
             "addTraining": {
                 "name": "Green Shop Training",
                 "tools": [
-                    {"name": "Bandsaw", "category": {"name": "Green Machines",}},
-                    {"name": "Belt Sander", "category": {"name": "Green Machines",}},
-                    {"name": "Drill Press", "category": {"name": "Green Machines",}},
+                    {"name": "Bandsaw", "category": {"name": "Green Machines"}},
+                    {"name": "Belt Sander", "category": {"name": "Green Machines"}},
+                    {"name": "Drill Press", "category": {"name": "Green Machines"}},
                 ],
             }
         }
