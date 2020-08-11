@@ -6,8 +6,14 @@ dist: xenial
 cache: pip
 services:
   - docker
+addons:
+  apt:
+    packages:
+      - docker-ce
+    update: true
 env:
   global:
+    - DOCKER_BUILDKIT=1
     - DOCKER_COMPOSE_VERSION=1.26.2
     - DEPENDENCIES=jackgreenberg/tools-dependencies:latest
     - BACKEND=jackgreenberg/tools-backend:latest
