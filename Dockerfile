@@ -33,6 +33,7 @@ RUN ["poetry", "install", "--no-root"]
 
 
 FROM jackgreenberg/poetry as final
+ENV POETRY_VIRTUALENVS_CREATE=false
 COPY --from=dependencies /usr/local/lib/python3.7/dist-packages /usr/local/lib/python3.7/dist-packages
 
 ARG AZURE_APPLICATION_ID
@@ -42,6 +43,6 @@ ARG AZURE_CLIENT_SECRET
 WORKDIR /tools
 
 COPY . /tools/
-RUN poetry config virtualenvs.create false && poetry install
+RUN poetry install
 
 CMD ["/tools/scripts/entrypoint.sh"]

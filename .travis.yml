@@ -40,6 +40,10 @@ script:
 after_script:
   - docker-compose down
 
+after_success:
+  - docker login -u jackgreenberg -p ${DOCKER_PASS}
+  - docker push ${DEPENDENCIES}
+
 notifications:
   webhooks:
     - https://fathomless-fjord-24024.herokuapp.com/notify
