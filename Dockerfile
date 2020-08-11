@@ -14,6 +14,7 @@ RUN apt-get update && \
         python3-dev \
         python3-pip \
         curl \
+        git \
         postgresql-client \
         libpq-dev \
         && ln -sf $(which python3.7) $(which python3) \
