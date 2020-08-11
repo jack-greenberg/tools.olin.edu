@@ -8,7 +8,6 @@ services:
   - docker
 env:
   global:
-    - DOCKER_BUILDKIT=1
     - DOCKER_COMPOSE_VERSION=1.26.2
     - DEPENDENCIES=jackgreenberg/tools-dependencies
     - BACKEND=jackgreenberg/tools-backend
@@ -17,10 +16,6 @@ env:
 
 # Install docker-compose version
 before_install:
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-  - sudo apt-get update
-  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
@@ -28,8 +23,9 @@ before_install:
 
 # Build docker containers
 install:
-  - docker pull ${DEPENDENCIES} || docker build -t ${DEPENDENCIES} --target=dependencies .
-  - docker build -t ${BACKEND} --cache-from ${DEPENDENCIES} --build-arg BUILDKIT_INLINE_CACHE=1 .
+  - docker pull ${DEPENDENCIES} || true
+  - docker build --pull -t ${DEPENDENCIES} --cache-from ${DEPENDENCIES} --target=dependencies .
+  - docker build --pull -t ${BACKEND} --cache-from ${DEPENDENCIES} --cache-from ${BACKEND} --build-arg .
 
 # Run the containers with docker-compose
 before_script:
