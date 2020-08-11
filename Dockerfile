@@ -1,4 +1,4 @@
-FROM python:3.7-slim as dependencies
+FROM ubuntu:18.04 as dependencies
 MAINTAINER Jack Greenberg <jgreenberg@olin.edu>
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=on
@@ -24,6 +24,7 @@ RUN apt-get update && \
 ENV PATH "/root/.poetry/bin:${PATH}"
 
 COPY poetry.lock pyproject.toml /tools/
+RUN ["poetry", "config", "virtualenvs.create", "false"]
 RUN ["poetry", "install", "--no-root"]
 
 FROM dependencies as final
