@@ -25,7 +25,7 @@ before_install:
 install:
   - docker pull ${DEPENDENCIES} || true
   - docker build --pull -t ${DEPENDENCIES} --cache-from ${DEPENDENCIES} --target=dependencies .
-  - docker build --pull -t ${BACKEND} --cache-from ${DEPENDENCIES} --cache-from ${BACKEND} .
+  - docker build --tag ${BACKEND} --cache-from ${DEPENDENCIES} --cache-from ${BACKEND} .
 
 # Run the containers with docker-compose
 before_script:
