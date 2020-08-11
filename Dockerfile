@@ -1,4 +1,4 @@
-FROM jackgreenberg/poetry:latest as base
+FROM jackgreenberg/poetry:latest as dependencies
 MAINTAINER Jack Greenberg <jgreenberg@olin.edu>
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=on \
