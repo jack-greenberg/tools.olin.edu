@@ -33,13 +33,16 @@ install:
     docker build \
         --target dependencies \
         --cache-from "${DEPENDENCIES}:latest" \
+        --cache-from "${DEPENDENCIES}:${BRANCH}" \
         --tag "${DEPENDENCIES}:latest" \
         --tag "${DEPENDENCIES}:${BRANCH}" \
         .
   - |
     docker build \
       --cache-from "${BACKEND}:latest" \
+      --cache-from "${BACKEND}:${BRANCH}" \
       --cache-from "${DEPENDENCIES}:latest" \
+      --cache-from "${DEPENDENCIES}:${BRANCH}" \
       --tag "${BACKEND}:latest" \
       --tag "${BACKEND}:${BRANCH}" \
       .
