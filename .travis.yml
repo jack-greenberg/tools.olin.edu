@@ -54,18 +54,12 @@ script:
   - docker exec -ti -e CODECOV_TOKEN=${CODECOV_TOKEN} tools-backend nox -s lint safety tests ${CODECOV_TOKEN:+coverage}
 
 # Pushing docker images to hub.docker.com
-before_deploy:
+after_success:
   - echo "${DOCKER_PASS}" | docker login -u jackgreenberg --password-stdin
-
-deploy:
-  provider: script
-  script: |
-    docker push "${DEPENDENCIES}:latest" && \
-    docker push "${DEPENDENCIES}:${BRANCH}" && \
-    docker push "${BACKEND}:latest" && \
-    docker push "${BACKEND}:${BRANCH}"
-  on:
-    all_branches: true
+  - docker push "${DEPENDENCIES}:latest"
+  - docker push "${DEPENDENCIES}:${BRANCH}"
+  - docker push "${BACKEND}:latest"
+  - docker push "${BACKEND}:${BRANCH}"
 
 notifications:
   webhooks:
