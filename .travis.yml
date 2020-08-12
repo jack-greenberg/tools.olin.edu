@@ -27,7 +27,7 @@ before_install:
 # Build docker containers
 install:
   - docker build --pull --cache-from "$DEPENDENCIES" --target dependencies -t "$DEPENDENCIES" .
-  - docker build --pull --cache-from "$BACKEND" --target final --tag ${BACKEND} .
+  - docker build --pull --cache-from "$BACKEND" --tag ${BACKEND} .
 
 # Run the containers with docker-compose
 before_script:
@@ -39,8 +39,8 @@ script:
   - docker exec -ti -e CODECOV_TOKEN=${CODECOV_TOKEN} tools-backend nox -s lint safety tests coverage
 
 # Spin down docker containers
-after_script:
-  - docker-compose down
+# after_script:
+  # - docker-compose down
 
 after_success:
   - echo "$DOCKER_PASS" | docker login -u jackgreenberg --password-stdin
