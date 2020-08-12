@@ -3,7 +3,7 @@ set -e
 
 # Wait for db
 
-until pg_isready -h tools-db -U ${POSTGRES_USER} -p ${POSTGRES_PASSWORD}; do
+until pg_isready -h ${POSTGRES_DB_NAME:-tools-db} -U ${POSTGRES_USER:-tools}; do
     sleep .5
 done
 
