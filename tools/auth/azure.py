@@ -29,27 +29,15 @@ class AuthHandler(object):
             )
         return self.azure_client
 
-    def get_auth_url(self, scopes=None, state=None):
-        return self.client.get_authorization_request_url(
-            scopes or ["User.ReadBasic.All"],
-            state=state or str(uuid.uuid4()),
-            redirect_uri=url_for("auth.get_token", _external=True),
-        )
-
     def get_token(self, code, scopes, redirect_uri):
         response = self.client.acquire_token_by_authorization_code(
             code, scopes=scopes, redirect_uri=redirect_uri
         )
         if "error" in response:
-            raise AuthException("Error acquiring token: %s" % response.get("error"))
+            raise AuthException(
+                "Error acquiring token: {}".format(response.get("error"))
+            )
         return response
-
-    def get_logout_url(self):
-        return (
-            AZURE_AUTHORITY
-            + "/oauth2/v2.0/logout?post_logout_redirect_uri=http://localhost:8000"
-            + url_for("tools.index")
-        )
 
     def get_current_user(self):
         selection = ["id", "displayName", "mail", "givenName", "surname"]
@@ -58,27 +46,40 @@ class AuthHandler(object):
             params={"$select": ",".join(selection)},
             headers=self.get_auth_headers(),
         ).json()
-        response.update(
-            {
-                # Set the correct variable names
-                "email": response.pop("mail"),
-                "display_name": response.pop("displayName"),
-                "first_name": response.pop("givenName"),
-                "last_name": response.pop("surname"),
-                "user_id": response.pop("id"),
-            }
+        # TODO: Do we need to check for "error" in response?
+        return {
+            # Set the correct variable names
+            "email": response.pop("mail"),
+            "display_name": response.pop("displayName"),
+            "first_name": response.pop("givenName"),
+            "last_name": response.pop("surname"),
+            "user_id": response.pop("id"),
+        }
+
+    def get_auth_url(self, scopes=None, state=None):
+        return self.client.get_authorization_request_url(
+            scopes or ["User.ReadBasic.All"],
+            state=state or str(uuid.uuid4()),
+            redirect_uri=url_for("auth.get_token", _external=True),
         )
-        return response
+
+    @staticmethod
+    def get_logout_url():
+        return (
+            AZURE_AUTHORITY
+            + "/oauth2/v2.0/logout?post_logout_redirect_uri=http://localhost:8000"
+            + url_for("tools.index")
+        )
 
     @staticmethod
     def get_auth_headers():
         return {"Authorization": "Bearer " + session["access_token"]}
 
 
-def authed(f):
-    def wrapped(*args, **kwargs):
-        if not session.get("user"):
-            raise AuthException("User not logged in")
-        return f(*args, **kwargs)
-
-    return wrapped
+#  def authed(f):
+#      def wrapped(*args, **kwargs):
+#          if not session.get("user"):
+#              raise AuthException("User not logged in")
+#          return f(*args, **kwargs)
+#
+#      return wrapped

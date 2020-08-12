@@ -10,26 +10,23 @@ AUTH = Blueprint("auth", __name__, url_prefix="/auth")
 @AUTH.route("/token")
 def get_token():
     if request.args.get("state") != session.get("state"):
-        return redirect(url_for("tools.index"))  # No-op, goes back to Index page
+        raise AuthException("Mismatched state", code=400)
 
     if "error" in request.args:
         raise AuthException(
-            "Exception in auth process: {}".format(request.args.get("error"))
+            "Exception in auth process: {}".format(request.args.get("error")), code=500
         )
 
     if request.args.get("code"):
-        result = current_app.auth.get_token(
+        token_data = current_app.auth.get_token(
             code=request.args.get("code"),
             scopes=["User.ReadBasic.All"],
             redirect_uri=url_for("auth.get_token", _external=True),
         )
 
-        if "error" in result:
-            raise AuthException("Error retrieving login token", code=400)
-
-        session["user"] = result.get("id_token_claims")
-        session["access_token"] = result.get("access_token")
-        session["refresh_token"] = result.get("refresh_token")
+        session["user"] = token_data.get("id_token_claims")
+        session["access_token"] = token_data.get("access_token")
+        session["refresh_token"] = token_data.get("refresh_token")
 
         current_user = current_app.auth.get_current_user()
         existing_user = (
@@ -38,7 +35,9 @@ def get_token():
             .first()
         )
 
+        # TODO: eventually replace with upsert
         if not existing_user:
+            # INFO Log adding new user
             new_user = User(
                 user_id=current_user.get("user_id"),
                 email=current_user.get("email"),
@@ -53,7 +52,10 @@ def get_token():
             for key, value in current_user.items():
                 setattr(existing_user, key, value)
 
-    return redirect(url_for("tools.index"))
+        # This is authed, so could return to /dashboard or something
+        return redirect(url_for("tools.index"))
+
+    raise AuthException("No code provided", code=400)
 
 
 @AUTH.route("/logout")

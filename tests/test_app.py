@@ -16,7 +16,7 @@ def test_app_exception(app, client):
     app.add_url_rule("/raise", "raise", raise_exception)
 
     response = client.get("/raise")
-    assert json.loads(response.data) == {"message": "This is not allowed"}
+    assert json.loads(response.data) == {"message": "This is not allowed", "code": 500}
 
     with pytest.raises(Unrecoverable):  # Makes sure the test passes
         with pytest.raises(AppException):  # Try to catch an unrecoverable error

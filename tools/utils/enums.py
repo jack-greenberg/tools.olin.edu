@@ -13,3 +13,12 @@ class Role(Enum):
 
     def __str__(self):
         return self.to_str()
+
+
+class TrainingStatus(Enum):
+    STARTED = "Started"
+    READING = "Reading"
+    WORKSHEET = "Worksheet"
+    TRAINING = "Training"
+    TEST_PIECE = "Test Piece"
+    COMPLETE = "Complete"
