@@ -26,8 +26,11 @@ before_install:
 
 # Build docker containers
 install:
-  - docker build --pull --cache-from "$DEPENDENCIES" --target dependencies -t "$DEPENDENCIES" .
-  - docker build --pull --cache-from "$BACKEND" --tag ${BACKEND} .
+  # Build dependency image
+  - docker build --target dependencies --cache-from jackgreenberg/tools-dependencies:latest --tag jackgreenberg/tools-dependencies .
+  # - docker build --pull --cache-from "$DEPENDENCIES" --target dependencies -t "$DEPENDENCIES" .
+  # Build main image
+  - docker build --cache-from jackgreenberg/tools-backend:latest --cache-from jackgreenberg/tools-dependencies:latest --tag jackgreenberg/tools-backend .
 
 # Run the containers with docker-compose
 before_script:
@@ -44,9 +47,8 @@ script:
 
 after_success:
   - echo "$DOCKER_PASS" | docker login -u jackgreenberg --password-stdin
-  - docker tag $DEPENDENCIES:latest $DEPENDENCIES:$TRAVIS_BUILD_NUMBER
   - docker push $DEPENDENCIES:latest
-  - docker push $DEPENDENCIES:$TRAVIS_BUILD_NUMBER
+  - docker push $BACKEND:latest
 
 notifications:
   webhooks:
