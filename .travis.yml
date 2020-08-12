@@ -23,7 +23,7 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   - docker-compose --version
   # Pull latest images
-  - docker pull "${BASE}:${BRANCH}" || docker pull "${BASE}:latest" || true
+  - docker pull "${BASE}:latest" || true
   - docker pull "${DEPENDENCIES}:${BRANCH}" || docker pull "${DEPENDENCIES}:latest" || true
   - docker pull "${BACKEND}:${BRANCH}" || docker pull "${BACKEND}:latest" || true
 
