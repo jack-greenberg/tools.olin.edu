@@ -2,6 +2,10 @@
 FROM jackgreenberg/poetry:latest as base
 MAINTAINER Jack Greenberg <jgreenberg@olin.edu>
 
+ARG AZURE_TENANT_ID
+ARG AZURE_APPLICATION_ID
+ARG AZURE_CLIENT_SECRET
+
 ENV PIP_DISABLE_PIP_VERSION=on \
     POETRY_VERSION=1.0.10 \
     POETRY_VIRTUALENVS_CREATE=false \
