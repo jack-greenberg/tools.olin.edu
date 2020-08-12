@@ -24,10 +24,10 @@ class TrainingQuery(ObjectType):
     trainings = List(Training)
 
     def resolve_training(self, info, id=None, **kwargs):
-        pass
+        return g.db_session.query(TrainingModel).filter_by(id=id).first()
 
     def resolve_trainings(self, info, **kwargs):
-        pass
+        return g.db_session.query(TrainingModel).all()
 
 
 """

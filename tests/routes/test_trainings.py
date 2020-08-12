@@ -83,3 +83,76 @@ def test_new_multitool_training(client, db_session):
             }
         }
     } == resp
+
+
+def test_training_queries(client, db_session):
+    tool = mock_tool(1, db_session, name="Tool 1")
+    tr = mock_training(1, db_session, tools=[tool], name="Beginning")
+    mock_training(2, db_session, tools=[tool], prerequisite=tr, name="Intermediate")
+
+    resp = client.post(
+        "/api/",
+        data={
+            "query": """
+                query getTraining {
+                    training (
+                        id: 1
+                    ) {
+                        id
+                        name
+                        tools {
+                            name
+                        }
+                    }
+                }
+            """
+        },
+    ).get_json()
+
+    assert "errors" not in resp
+    assert {
+        "data": {
+            "training": {"id": "1", "name": "Beginning", "tools": [{"name": "Tool 1"}]}
+        }
+    } == resp
+
+    resp = client.post(
+        "/api/",
+        data={
+            "query": """
+                query getTrainings {
+                    trainings {
+                        id
+                        name
+                        tools {
+                            name
+                        }
+                        prerequisite {
+                            id
+                            name
+                        }
+                    }
+                }
+            """
+        },
+    ).get_json()
+
+    assert "errors" not in resp
+    assert {
+        "data": {
+            "trainings": [
+                {
+                    "id": "1",
+                    "name": "Beginning",
+                    "tools": [{"name": "Tool 1"}],
+                    "prerequisite": None,
+                },
+                {
+                    "id": "2",
+                    "name": "Intermediate",
+                    "tools": [{"name": "Tool 1"}],
+                    "prerequisite": {"id": "1", "name": "Beginning"},
+                },
+            ]
+        }
+    } == resp

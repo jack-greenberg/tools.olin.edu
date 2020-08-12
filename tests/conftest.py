@@ -31,10 +31,11 @@ def engine():
 
 @pytest.fixture
 def db(engine):
+    BASE.metadata.create_all(bind=engine)
+
     yield
 
     BASE.metadata.drop_all(bind=engine)
-    BASE.metadata.create_all(bind=engine)
 
 
 @pytest.fixture
