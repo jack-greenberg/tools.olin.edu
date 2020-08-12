@@ -37,7 +37,7 @@ install:
         --tag "${DEPENDENCIES}:${BRANCH}" \
         .
   - |
-    docker build
+    docker build \
       --cache-from "${BACKEND}:latest" \
       --cache-from "${DEPENDENCIES}:latest" \
       --tag "${BACKEND}:latest" \
