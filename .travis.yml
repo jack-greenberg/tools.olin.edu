@@ -11,9 +11,8 @@ env:
     - DOCKER_COMPOSE_VERSION=1.26.2
     - DEPENDENCIES=jackgreenberg/tools-dependencies
     - BACKEND=jackgreenberg/tools-backend
-    - secure: znfGbnNjQhqc309T9mBfrLYvXPgPkydW6f0zH03e83nQKtIbs56vX1gpOlbXtgVQRewRF7HBUlWBEilC1TQVu0dxmT45KP+aBdoiCOHq+c4Z+nOqq+UPql0HgF3vOgmxQA8ilbU5TAUt+2D80deFCTVdPOuhs6GtKFKUzmjZGMMbr12z9tU6DhSsumD4keplmGCMaLEpz9IzCcA1KIJ/pkvpK/rO0aT4BvKTDOLbz/QkdCfsTFFStqr6Ztt1hHszOOtwhRIFQa/C5xGmqDSP/vn9Vl2PEAV8+zdh3BHpbo0ci+Vp/OZdsPXC27x2wm248j9wLM5mnAXlsqFpyC34Xf/xCBo+cPoIq8KCxalX6C1zImiDhTO4266+xnOFXCzEhKsV9IEcdE71nroXP9zmmm/RiAyGKkwn/Ppas2R9MF3hPp6af8iSMcRQ/X11xD9iigtTG1+y8b+BFGC2E+VnRZMMdg/OZuBHUweuCAwNpOrBIdnfekaczO/65bLi6nAqSZMwEiipVekYWF9Zid2tNaHJXYUrUb8VwHWfQiwPyoyrCDuVKVuR6t30B85uEV+bUqTAO/IH+5BtARZOo52a+6Bbi2k+V4+kBnkltlz9xpGsUon3dLYYDUWp5ksSS1e/o3QW9fbUQ/xO1Z88ElByyQA0A6rDbDlrJo57TRVYAfc=
-    - secure: tahevMWpxW/EToVtGFNE9xiG9MVAujjiPQDaSWIZRwRPamksDz/RYsFh7SrXySuy9a5VvdXrZmUX3fgCr+UAKBg8Cjdq+R8TY0mgOTUtdRCQjc1/pHjkBhGOAtL9McizHquYypvNo9Zztswe1Z3zFBNSmUKwADg3OQ1vrq6U/zXHQbq7JWWFxPPKzdBe9IeGESrjKoH5CM/0orZdqfhCayEShFMVO27qC3WJia6GPx8OoGSRtUmdY+lwvHIvqSoe5om2w3juR0eIac80fRMwrDuml8jtee5naLqY25TGxECxfVT8mBILBT4PLXn34lxXWjBQplKdKJ7giiuwfgR8ik8W2GTI1ev0f4+Uw5pTUK9DLkRU0Y8TpKAAjLJtDHwQn5cd5hyup3miarR5latgMoHnX+OR1vZvjDK49Dt5ZKnb5ABA1DBZToJN/okQ4iI/kQMB6gRQHhlgZa4iOHKC1QfeVGKdmmwfPNYRd+EPOOx/vhJEDttm0Aehx5Kyy1i2dowaCw2zOlGBSsXPduKNo1dtGqr0b315zkmM54AsRvpm4/ejAn7dOg5NKztV5h08b5Za1hO2DFjWxwzgnumzgBZFtK/KeZ8xmmnumKQJfYZ0wiDhXedx+NkgLHbSd3NSbjYSJwDy4B6NqstJbysoGWrW/h3ceqMdD0I2SoPb6tI=
-
+    - secure: "znfGbnNjQhqc309T9mBfrLYvXPgPkydW6f0zH03e83nQKtIbs56vX1gpOlbXtgVQRewRF7HBUlWBEilC1TQVu0dxmT45KP+aBdoiCOHq+c4Z+nOqq+UPql0HgF3vOgmxQA8ilbU5TAUt+2D80deFCTVdPOuhs6GtKFKUzmjZGMMbr12z9tU6DhSsumD4keplmGCMaLEpz9IzCcA1KIJ/pkvpK/rO0aT4BvKTDOLbz/QkdCfsTFFStqr6Ztt1hHszOOtwhRIFQa/C5xGmqDSP/vn9Vl2PEAV8+zdh3BHpbo0ci+Vp/OZdsPXC27x2wm248j9wLM5mnAXlsqFpyC34Xf/xCBo+cPoIq8KCxalX6C1zImiDhTO4266+xnOFXCzEhKsV9IEcdE71nroXP9zmmm/RiAyGKkwn/Ppas2R9MF3hPp6af8iSMcRQ/X11xD9iigtTG1+y8b+BFGC2E+VnRZMMdg/OZuBHUweuCAwNpOrBIdnfekaczO/65bLi6nAqSZMwEiipVekYWF9Zid2tNaHJXYUrUb8VwHWfQiwPyoyrCDuVKVuR6t30B85uEV+bUqTAO/IH+5BtARZOo52a+6Bbi2k+V4+kBnkltlz9xpGsUon3dLYYDUWp5ksSS1e/o3QW9fbUQ/xO1Z88ElByyQA0A6rDbDlrJo57TRVYAfc="
+    - secure: "hOlhEkS7VIwlG5bUXthxWkwQGjzfeBiXKAXaKar48CpahVL5i1dqUj/jrutA/uKaxqYNnTwmeVfRxVRl4ykg1QM9jjYeq45qiEMV8vyXlHu/8KMUwTPugjNVPC7BroeMQM9NWi+wTjB3dQJqUu00yJpeHmiszvSI2Qw8cmae+2KLOeW9N0QpZGrj4qY9NiEXHv2gQYHNmgK+tE431LSSpIgdn1dqggec6PM3GvhWPVV74qlv38IMBHHZ+OaLbnDEAgb3RkhhbyHnWUyuPgFWIpmkvz/SVSuYqZkKej2ZJZKcSthkS2EZpIBKK7S+oansH+3E+i9kpAliCW2G77VPw5JTaqNgYoFJCZrDUimrjRgx3gsXu6+LpauIuUBlp5dOcmSK4xChmDfWWo/eL/MGaIgtHUqoNgCZbO/of8EtG278DMgV8JduevzDND8UoG4qaCK5Ik/0s/JV5AV8JzKSNjs1RuTr+gD/AnhaOeN/8bXLiXLcCf+mILafBGPhUFAgDKB+qVP9YdshesVuyP+u3D//kZb43zIdiVnFjVXRHn3Rct4AGVfw+8hCy/7B4ZOHGz/uhi+/ZWUgILETjalt8qWlUf2R96DZPtptl8KIMYzN8yB/VLrnL/h+lZO0YKLVhA40dCh2zLi11bGEBSWOCDn3k1Cint5xvQvm8MoHN3w="
 # Install docker-compose version
 before_install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
@@ -24,7 +23,7 @@ before_install:
 # Build docker containers
 install:
   - docker pull ${DEPENDENCIES} || true
-  - docker build --pull -t ${DEPENDENCIES} --cache-from ${DEPENDENCIES} --target=dependencies .
+  - docker build -t ${DEPENDENCIES} --cache-from ${DEPENDENCIES} --target=dependencies .
   - docker build --tag ${BACKEND} --cache-from ${DEPENDENCIES} --cache-from ${BACKEND} .
 
 # Run the containers with docker-compose
