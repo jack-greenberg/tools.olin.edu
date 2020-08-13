@@ -12,6 +12,7 @@ Flask app with React frontend for maintaining machine shop trainings @ [Olin Col
     <img src="https://codecov.io/gh/jack-greenberg/tools.olin.edu/branch/main/graph/badge.svg" alt="Code Coverage" />
   </a>
 </p>
+
 #### 🔗 Quick Links
 
 [tools.olin.edu](https://tools.olin.edu) | [proposal.md](./docs/proposal.md)
