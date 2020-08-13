@@ -1,8 +1,8 @@
-// For configuration documentation see http://romefrontend.dev/#project-configuration
 name: "web"
 lint: {
-	ignore: [
-		"build"
-]
+    ignore: [
+        "build",
+        "node_modules",
+    ]
 }
 root: true
