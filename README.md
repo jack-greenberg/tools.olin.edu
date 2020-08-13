@@ -1,10 +1,9 @@
-<img src="./docs/images/logo.png" align="left" width="40%" />
+<img src="./docs/images/logo.png" width="40%" alt="Tools.Olin" />
 
----
-
+<div align="center">
 [![Build Status](https://img.shields.io/travis/jack-greenberg/tools.olin.edu.svg?logo=travis)](https://travis-ci.org/jack-greenberg/tools.olin.edu)
-
 [![codecov](https://codecov.io/gh/jack-greenberg/tools.olin.edu/branch/main/graph/badge.svg)](https://codecov.io/gh/jack-greenberg/tools.olin.edu)
+</div>
 
 Web application for maintaining machine shop trainings at Olin College.
 
