@@ -36,6 +36,7 @@ def db(engine):
     yield
 
     BASE.metadata.drop_all(bind=engine)
+    BASE.metadata.create_all(bind=engine)
 
 
 @pytest.fixture

@@ -15,3 +15,8 @@ class AppException(Exception):
 class AuthException(AppException):
     def __init__(self, message, code=401, **kwargs):
         AppException.__init__(self, message, code=code, **kwargs)
+
+
+class LoginRequired(AppException):
+    def __init__(self, message, code=401, **kwargs):
+        AppException.__init__(self, message, code=code, **kwargs)

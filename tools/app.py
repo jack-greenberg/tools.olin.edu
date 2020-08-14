@@ -1,8 +1,7 @@
 import os
-import json
 import logging
 
-from flask import Flask, g, flash
+from flask import Flask, g, flash, jsonify
 
 from tools.config import DevelopmentConfig, ProductionConfig
 from tools.routes import blueprints
@@ -29,7 +28,7 @@ def make_app(config):
     # Error handling
     @app.errorhandler(AppException)
     def catch_exception(error):
-        error_dict = json.dumps(error.to_dict())
+        error_dict = error.to_dict()
 
         if error.code >= 500:
             logger.exception(f"Internal exception: {error.to_dict()}")
@@ -38,7 +37,7 @@ def make_app(config):
 
         flash(error.message)
         # TODO: replace with render_template for error page
-        return error_dict, error.code
+        return jsonify(error_dict), error.code
 
     @app.before_request
     def before():
