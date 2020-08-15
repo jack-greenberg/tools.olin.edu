@@ -13,3 +13,7 @@ indent_size = 4
 [{package.json,*.yml}]
 indent_style = space
 indent_size = 2
+
+[{*.js,*.jsx}]
+indent_style = space
+indent_size = 2
