@@ -61,7 +61,7 @@ def make_app(config):
     return app
 
 
-if __name__ == "__main__":
+def build_app():
     if os.getenv("ENV") == "production":
         config = ProductionConfig
     else:
@@ -70,5 +70,13 @@ if __name__ == "__main__":
     if not AZURE_ENABLED:
         logger.warning("Running without Azure")
 
-    app = make_app(config)
+    return make_app(config)
+
+
+def run_app():
+    app = build_app()
     app.run("0.0.0.0")
+
+
+if __name__ == "__main__":
+    run_app()

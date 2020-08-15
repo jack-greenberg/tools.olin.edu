@@ -1,7 +1,7 @@
 from tests.conftest import mock_tool, mock_training
 
 
-def test_new_training_prerequisite(client, db_session):
+def test_new_training_prerequisite(client, db_session, current_user):
     tool = mock_tool(1, db_session, name="Lathe", category="MetalWorking")
     mock_training(1, db_session, tools=[tool], name="Fundamental Lathe Training")
 
@@ -43,7 +43,7 @@ def test_new_training_prerequisite(client, db_session):
     } == resp
 
 
-def test_new_multitool_training(client, db_session):
+def test_new_multitool_training(client, db_session, current_user):
     mock_tool(2, db_session, name="Bandsaw", category="Green Machines")
     mock_tool(3, db_session, name="Belt Sander", category="Green Machines")
     mock_tool(4, db_session, name="Drill Press", category="Green Machines")
@@ -85,7 +85,7 @@ def test_new_multitool_training(client, db_session):
     } == resp
 
 
-def test_training_queries(client, db_session):
+def test_training_queries(client, db_session, current_user):
     tool = mock_tool(1, db_session, name="Tool 1")
     tr = mock_training(1, db_session, tools=[tool], name="Beginning")
     mock_training(2, db_session, tools=[tool], prerequisite=tr, name="Intermediate")
