@@ -72,6 +72,7 @@ def build_app():
 
     return make_app(config)
 
+
 def run_app():
     app = build_app()
     app.run("0.0.0.0")

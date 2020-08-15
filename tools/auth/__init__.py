@@ -3,6 +3,7 @@ from tools.errors import LoginRequired
 
 from .azure import AuthHandler
 
+
 def authed(f):
     def wrapped(*args, **kwargs):
         if not session.get("user"):

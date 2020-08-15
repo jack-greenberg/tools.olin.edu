@@ -33,7 +33,7 @@ then
 cat << EOF
 
       $ ${bold}${green}sudo apt update${cl}
-      
+
       $ ${bold}${green}curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -${cl}
 
       # This assumes you are running Ubuntu 18.04
@@ -64,7 +64,7 @@ then
   printf "    Install docker-compose:\n"
 
 cat << EOF
- 
+
       $ $bold$green sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-\$(uname -s)-\$(uname -m)" -o /usr/local/bin/docker-compose $cl
 
       $ $bold$green sudo chmod +x /usr/local/bin/docker-compose $cl
