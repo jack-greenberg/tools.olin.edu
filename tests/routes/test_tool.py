@@ -2,7 +2,7 @@ from tests.conftest import mock_tool
 from tools.database.models import Tool, ToolCategory
 
 
-def test_tool_queries(app, client, db_session):
+def test_tool_queries(app, client, db_session, current_user):
     with app.test_request_context():
         resp = client.post(
             "/api/",
@@ -108,7 +108,7 @@ def test_tool_queries(app, client, db_session):
         ]
 
 
-def test_tools_by_category(app, client, db_session):
+def test_tools_by_category(app, client, db_session, current_user):
     mock_tool(1, db_session, name="Lathe", category="MetalWorking")
     mock_tool(2, db_session, name="Mill", category="MetalWorking")
     mock_tool(3, db_session, name="MIG Welder", category="Welding")

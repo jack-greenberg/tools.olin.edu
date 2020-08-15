@@ -17,7 +17,15 @@ def app():
 
 @pytest.fixture
 def client(app):
-    return app.test_client()
+    client = app.test_client()
+    return client
+
+
+@pytest.fixture
+def current_user(app, client):
+    with client.session_transaction() as sess:
+        sess["user"] = {"oid": "some_user_id"}
+    return
 
 
 @pytest.fixture

@@ -7,9 +7,10 @@ from tools.auth import authed
 API = Blueprint("api", __name__, url_prefix="/api")
 
 
-@authed
-def graphql():
-    return GraphQLView.as_view("graphql", schema=AppSchema, graphiql=True)
+class GraphQL(GraphQLView):
+    decorators = [authed]
 
 
-API.add_url_rule("/", view_func=graphql)
+API.add_url_rule(
+    "/", view_func=GraphQL.as_view("graphql", schema=AppSchema, graphiql=True)
+)
