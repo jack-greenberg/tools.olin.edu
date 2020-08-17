@@ -2,12 +2,8 @@ import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 
 const baseUrl = "/api/"
 
-export const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  uri: baseUrl
-})
 
-const userQuery = gql`
+export const userQuery = gql`
   query getCurrentUser {
     me {
       id
@@ -20,12 +16,15 @@ const userQuery = gql`
   }
 `
 
-export const getCurrentUser = async () => {
-  var r;
-  await client.query({ query: userQuery })
-    .then(response => {
-      r = response.data;
-    })
-
-  return r
-}
+// export const getCurrentUser = async () => {
+//   var r;
+//   await client.query({ query: userQuery })
+//     .then(response => {
+//       r = response.data;
+//     })
+//     .catch(err => {
+//       console.log();
+//     })
+// 
+//   return r
+// }

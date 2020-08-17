@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Home from "./pages/Home";
-import Login from "./pages/Login";
+// import Login from "./pages/Login";
 
 class AppRouter extends Component {
   render() {

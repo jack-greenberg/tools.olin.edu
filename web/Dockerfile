@@ -3,7 +3,7 @@ MAINTAINER Jack Greenberg <jgreenberg@olin.edu>
 
 WORKDIR /web
 
-COPY package.json ./
+COPY package.json yarn.lock ./
 RUN ["yarn", "install"]
 
 FROM node:alpine as build
@@ -11,8 +11,8 @@ WORKDIR /web
 
 COPY --from=base /web/node_modules /web/node_modules
 
-COPY . /web/
+COPY . /web
 
 RUN ["yarn", "build"]
 
-CMD ["yarn", "run", "start"]
+CMD ["sh", "/web/scripts/entrypoint.sh"]
