@@ -15,4 +15,4 @@ COPY . /web
 
 RUN ["yarn", "build"]
 
-CMD ["sh", "/web/scripts/entrypoint.sh"]
+CMD ["/web/scripts/entrypoint.sh"]

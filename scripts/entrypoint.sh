@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 # Wait for db
 until pg_isready -h ${POSTGRES_DB_NAME:-tools-db} -U ${POSTGRES_USER:-tools}; do
@@ -9,4 +9,4 @@ done
 # Import database
 alembic upgrade head
 
-uwsgi uwsgi.ini &> /var/log/tools.log
+uwsgi uwsgi.ini
