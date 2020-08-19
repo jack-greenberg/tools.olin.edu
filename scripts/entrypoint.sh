@@ -9,4 +9,4 @@ done
 # Import database
 alembic upgrade head
 
-uwsgi uwsgi.ini
+exec uwsgi uwsgi.ini

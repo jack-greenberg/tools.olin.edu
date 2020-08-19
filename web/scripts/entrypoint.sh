@@ -1,4 +1,4 @@
 #!/bin/sh
-set -ex
+set -eo pipefail
 
 yarn run start | cat
