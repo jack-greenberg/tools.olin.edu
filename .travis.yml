@@ -6,7 +6,6 @@ dist: xenial
 branches:
   only:
     - main
-cache: pip
 services:
   - docker
 env:
@@ -68,7 +67,7 @@ jobs:
 
       # Run the containers with docker-compose
       before_script:
-        - docker-compose up -d
+        - docker-compose up -d tools-backend tools-db
         - docker-compose ps
 
       # Run tests and lints
