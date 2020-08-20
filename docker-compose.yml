@@ -24,8 +24,6 @@ services:
     build:
       context: ./web
     image: jackgreenberg/tools-web:latest
-    environment:
-      DEBUG: 'express:*'
     tty: true
     stdin_open: true
     container_name: tools-web
