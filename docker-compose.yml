@@ -6,6 +6,8 @@ services:
     image: jackgreenberg/tools-backend:latest
     container_name: tools-backend
     restart: always
+    depends_on:
+      - tools-db
     environment:
       FLASK_SKIP_DOTENV: 1
       AZURE_APPLICATION_ID: ${AZURE_APPLICATION_ID}
@@ -14,9 +16,23 @@ services:
     ports:
       - "8000:5000"
     volumes:
-      - .:/tools
+      - ./tools:/tools/tools
     networks:
       - tools-net
+
+  tools-web:
+    build:
+      context: ./web
+    image: jackgreenberg/tools-web:latest
+    tty: true
+    stdin_open: true
+    container_name: tools-web
+    volumes:
+      - ./web/src:/web/src
+    networks:
+      - tools-net
+    ports:
+      - "3000:3000"
 
   tools-db:
     container_name: tools-db
@@ -43,17 +59,20 @@ services:
       - 8080:80
       - 8443:443
     volumes:
-      - ./deployment/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - ./deployment/nginx.conf:/etc/nginx/conf.d/default.conf
     networks:
       - tools-net
     depends_on:
       - tools-backend
+      - tools-web
 
   # letsencrypt:
   #   image: jrcs/letsencrypt-nginx-proxy-companion
   #   container_name: tools-letsencrypt
   #   volumes_from:
   #     - nginx-proxy
+  #   depends_on:
+  #     - tools-proxy
   #   volumes:
   #     - tools-certs:/etc/nginx/certs:rw
   #     - /var/run/docker.sock:/var/run/docker.sock:ro

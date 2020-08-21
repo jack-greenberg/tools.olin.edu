@@ -6,7 +6,6 @@ dist: xenial
 branches:
   only:
     - main
-cache: pip
 services:
   - docker
 env:
@@ -16,66 +15,101 @@ env:
     - BASE=jackgreenberg/poetry
     - DEPENDENCIES=jackgreenberg/tools-dependencies
     - BACKEND=jackgreenberg/tools-backend
+    - WEB=jackgreenberg/tools-web
     - PROXY=jackgreenberg/tools-proxy
     - secure: "znfGbnNjQhqc309T9mBfrLYvXPgPkydW6f0zH03e83nQKtIbs56vX1gpOlbXtgVQRewRF7HBUlWBEilC1TQVu0dxmT45KP+aBdoiCOHq+c4Z+nOqq+UPql0HgF3vOgmxQA8ilbU5TAUt+2D80deFCTVdPOuhs6GtKFKUzmjZGMMbr12z9tU6DhSsumD4keplmGCMaLEpz9IzCcA1KIJ/pkvpK/rO0aT4BvKTDOLbz/QkdCfsTFFStqr6Ztt1hHszOOtwhRIFQa/C5xGmqDSP/vn9Vl2PEAV8+zdh3BHpbo0ci+Vp/OZdsPXC27x2wm248j9wLM5mnAXlsqFpyC34Xf/xCBo+cPoIq8KCxalX6C1zImiDhTO4266+xnOFXCzEhKsV9IEcdE71nroXP9zmmm/RiAyGKkwn/Ppas2R9MF3hPp6af8iSMcRQ/X11xD9iigtTG1+y8b+BFGC2E+VnRZMMdg/OZuBHUweuCAwNpOrBIdnfekaczO/65bLi6nAqSZMwEiipVekYWF9Zid2tNaHJXYUrUb8VwHWfQiwPyoyrCDuVKVuR6t30B85uEV+bUqTAO/IH+5BtARZOo52a+6Bbi2k+V4+kBnkltlz9xpGsUon3dLYYDUWp5ksSS1e/o3QW9fbUQ/xO1Z88ElByyQA0A6rDbDlrJo57TRVYAfc="
     - secure: "hOlhEkS7VIwlG5bUXthxWkwQGjzfeBiXKAXaKar48CpahVL5i1dqUj/jrutA/uKaxqYNnTwmeVfRxVRl4ykg1QM9jjYeq45qiEMV8vyXlHu/8KMUwTPugjNVPC7BroeMQM9NWi+wTjB3dQJqUu00yJpeHmiszvSI2Qw8cmae+2KLOeW9N0QpZGrj4qY9NiEXHv2gQYHNmgK+tE431LSSpIgdn1dqggec6PM3GvhWPVV74qlv38IMBHHZ+OaLbnDEAgb3RkhhbyHnWUyuPgFWIpmkvz/SVSuYqZkKej2ZJZKcSthkS2EZpIBKK7S+oansH+3E+i9kpAliCW2G77VPw5JTaqNgYoFJCZrDUimrjRgx3gsXu6+LpauIuUBlp5dOcmSK4xChmDfWWo/eL/MGaIgtHUqoNgCZbO/of8EtG278DMgV8JduevzDND8UoG4qaCK5Ik/0s/JV5AV8JzKSNjs1RuTr+gD/AnhaOeN/8bXLiXLcCf+mILafBGPhUFAgDKB+qVP9YdshesVuyP+u3D//kZb43zIdiVnFjVXRHn3Rct4AGVfw+8hCy/7B4ZOHGz/uhi+/ZWUgILETjalt8qWlUf2R96DZPtptl8KIMYzN8yB/VLrnL/h+lZO0YKLVhA40dCh2zLi11bGEBSWOCDn3k1Cint5xvQvm8MoHN3w="
 
-before_install:
-  # Install docker-compose version
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
-  - docker-compose --version
-  # Pull latest images
-  - docker pull "${BASE}:latest" || true
-  - docker pull "${PROXY}:${BRANCH}" || docker pull "${PROXY}:latest" || true
-  - docker pull "${DEPENDENCIES}:${BRANCH}" || docker pull "${DEPENDENCIES}:latest" || true
-  - docker pull "${BACKEND}:${BRANCH}" || docker pull "${BACKEND}:latest" || true
+jobs:
+  include:
+    - language: python
+      name: Backend
+      python: 3.7
 
-# Build docker images
-install:
-  - |
-    docker build \
-        --target dependencies \
-        --cache-from "${DEPENDENCIES}:latest" \
-        --cache-from "${DEPENDENCIES}:${BRANCH}" \
-        --tag "${DEPENDENCIES}:latest" \
-        --tag "${DEPENDENCIES}:${BRANCH}" \
-        .
-  - |
-    docker build \
-      --cache-from "${BACKEND}:latest" \
-      --cache-from "${BACKEND}:${BRANCH}" \
-      --cache-from "${DEPENDENCIES}:latest" \
-      --cache-from "${DEPENDENCIES}:${BRANCH}" \
-      --tag "${BACKEND}:latest" \
-      --tag "${BACKEND}:${BRANCH}" \
-      .
-  - |
-    docker build \
-      --cache-from "${PROXY}:latest" \
-      --file deployment/Dockerfile.nginx \
-      --tag "${PROXY}:latest" \
-      ./deployment
+      # Install docker-compose version
+      before_install:
+        - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+        - chmod +x docker-compose
+        - sudo mv docker-compose /usr/local/bin
+        - docker-compose --version
+        # Pull latest images
+        - docker pull "${BASE}:latest" || true
+        - docker pull "${DEPENDENCIES}:${BRANCH}" || docker pull "${DEPENDENCIES}:latest" || true
+        - docker pull "${PROXY}:${BRANCH}" || docker pull "${PROXY}:latest" || true
+        - docker pull "${BACKEND}:${BRANCH}" || docker pull "${BACKEND}:latest" || true
 
-# Run the containers with docker-compose
-before_script:
-  - docker-compose up -d
-  - docker-compose ps
+      # Build docker images
+      install:
+        - |
+          docker build \
+            --target dependencies \
+            --cache-from "${DEPENDENCIES}:latest" \
+            --cache-from "${DEPENDENCIES}:${BRANCH}" \
+            --tag "${DEPENDENCIES}:latest" \
+            --tag "${DEPENDENCIES}:${BRANCH}" \
+            .
 
-# Run tests and lints
-script:
-  - docker exec -ti -e CODECOV_TOKEN=${CODECOV_TOKEN} tools-backend nox -s lint safety tests ${CODECOV_TOKEN:+coverage}
+        - |
+          docker build \
+            --cache-from "${BACKEND}:latest" \
+            --cache-from "${BACKEND}:${BRANCH}" \
+            --cache-from "${DEPENDENCIES}:latest" \
+            --cache-from "${DEPENDENCIES}:${BRANCH}" \
+            --tag "${BACKEND}:latest" \
+            --tag "${BACKEND}:${BRANCH}" \
+            .
+        - |
+          docker build \
+            --cache-from "${PROXY}:latest" \
+            --file deployment/Dockerfile.nginx \
+            --tag "${PROXY}:latest" \
+            ./deployment
 
-# Pushing docker images to hub.docker.com
-after_success:
-  - echo "${DOCKER_PASS}" | docker login -u jackgreenberg --password-stdin
-  - docker push "${DEPENDENCIES}:latest"
-  - docker push "${DEPENDENCIES}:${BRANCH}"
-  - docker push "${BACKEND}:latest"
-  - docker push "${BACKEND}:${BRANCH}"
-  - docker push "${PROXY}:latest"
-  - docker push "${PROXY}:${BRANCH}"
+      # Run the containers with docker-compose
+      before_script:
+        - docker-compose up -d tools-backend tools-db
+        - docker-compose ps
+
+      # Run tests and lints
+      script:
+        - docker exec -ti -e CODECOV_TOKEN=${CODECOV_TOKEN} tools-backend nox -s lint safety tests ${CODECOV_TOKEN:+coverage}
+
+      # Spin down docker containers
+      after_script:
+        - docker-compose down
+
+      # Pushing docker images to hub.docker.com
+      after_success:
+        - echo "${DOCKER_PASS}" | docker login -u jackgreenberg --password-stdin
+        - docker push "${DEPENDENCIES}:latest"
+        - docker push "${DEPENDENCIES}:${BRANCH}"
+        - docker push "${BACKEND}:latest"
+        - docker push "${BACKEND}:${BRANCH}"
+        - docker push "${PROXY}:latest"
+        - docker push "${PROXY}:${BRANCH}"
+
+
+    - language: node_js
+      name: Web
+      node_js: 14
+      cache: yarn
+
+      before_install:
+        - docker pull "${WEB}:latest" || true
+
+      install:
+        - |
+          docker build \
+            --tag "${WEB}:latest" \
+            --cache-from "${WEB}:latest" \
+            ./web
+
+      script:
+        - docker run --rm -ti ${WEB} node -e "console.log('Testing...');"
+
+      after_success:
+        - echo "${DOCKER_PASS}" | docker login -u jackgreenberg --password-stdin
+        - docker push "${WEB}:latest"
 
 notifications:
   webhooks:

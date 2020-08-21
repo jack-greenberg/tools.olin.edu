@@ -1,0 +1,8 @@
+name: "web"
+lint: {
+    ignore: [
+        "build",
+        "node_modules",
+    ]
+}
+root: true
