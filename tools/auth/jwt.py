@@ -1,8 +1,4 @@
-from flask_jwt_extended import (
-    JWTManager,
-    verify_jwt_in_request,
-    get_jwt_claims,
-)
+from flask_jwt_extended import JWTManager, verify_jwt_in_request, get_jwt_claims
 
 from tools.errors import AuthException
 from tools.utils import Role
@@ -34,7 +30,3 @@ def scoped(scope: Role):
         return arg_wrap
 
     return fn_wrap
-
-
-def check_scope_claims(claims, scope_required):
-    assert claims.issuperset(list(Role)[list(Role).index(scope_required) :])

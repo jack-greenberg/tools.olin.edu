@@ -2,7 +2,6 @@ from flask import session, g
 from graphene import Mutation, List, ObjectType, String, Int, Field, ID, Enum, Argument
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
-from tools.errors import AppException
 from tools.utils import Role as RoleEnum, TrainingStatus as TrainingStatusEnum
 from tools.database.models import User as UserModel, UserTraining as UserTrainingModel
 
@@ -59,8 +58,6 @@ class UserQuery(ObjectType):
     def resolve_me(self, info):
         my_id = session.get("user")["oid"]
         me = g.db_session.query(UserModel).filter_by(user_id=my_id).first()
-        if not me:
-            raise AppException("Not found", code=404)
         return me
 
     def resolve_user(self, info, id=None):  # id or user_id?

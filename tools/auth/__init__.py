@@ -2,7 +2,7 @@ from flask import session, current_app
 from tools.errors import LoginRequired
 
 from .azure import AuthHandler
-from .jwt import JWT, scoped, check_scope_claims
+from .jwt import JWT, scoped
 
 
 def authed(f):
@@ -17,10 +17,4 @@ def authed(f):
     return wrapped
 
 
-__all__ = [
-    "AuthHandler",
-    "authed",
-    "JWT",
-    "scoped",
-    "check_scope_claims",
-]
+__all__ = ["AuthHandler", "authed", "JWT", "scoped"]

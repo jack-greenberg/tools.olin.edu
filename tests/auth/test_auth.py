@@ -5,7 +5,7 @@ from unittest.mock import patch
 import responses
 
 from msal import ConfidentialClientApplication
-from flask import url_for, session, get_flashed_messages, request
+from flask import url_for, session, get_flashed_messages
 
 from tools.auth import AuthHandler
 from tools.errors import AuthException
@@ -64,6 +64,13 @@ def test_auth_process(app, client, db_session):
             body = json.loads(response.data)
             assert body["login_url"] == "https://example.com"
 
+            # `with client` allows you to check the session
+            with client:
+                response = client.get("/auth/login")
+                assert session.get("state")
+                assert response.status_code == 302
+                assert response.headers.get("Location") == "https://example.com"
+
         # Get a token, mock out the acquire_token thing
         token = uuid.uuid4()
         with patch.object(
@@ -92,12 +99,10 @@ def test_auth_process(app, client, db_session):
                         "code": "test_code",
                     },
                 )
-                #  print(response.headers)
                 assert (
                     session["user"].get("oid") == "ac19540c-210b-ff37-asdf-10293abfe9se"
                 )
 
-                #  print(response.headers.get_all("Set-Cookie"))
                 cookies = ", ".join(response.headers.get_all("Set-Cookie"))
                 assert "access_token_cookie" in cookies
                 assert "refresh_token_cookie" in cookies
@@ -264,14 +269,3 @@ def test_existing_user(app, client, db_session):
 
             # User should be updated in the database
             assert db_session.query(User).first().email == "Ada.Lovelace@olin.edu"
-
-
-"""
-JWTs
-"""
-
-
-def test_scope_behavior():
-    pass
-    #  student_role = Roles.STUDENT
-    #  ninja_role = Roles.NINJA
