@@ -1,10 +1,26 @@
+import uuid
+
 from flask import Blueprint, g, request, current_app, session, url_for, redirect
+from flask_jwt_extended import (
+    create_access_token,
+    create_refresh_token,
+    set_access_cookies,
+    set_refresh_cookies,
+    unset_jwt_cookies,
+)
 
 from tools.errors import AuthException
 from tools.database.models import User
 from tools.utils import Role
 
 AUTH = Blueprint("auth", __name__, url_prefix="/auth")
+
+
+@AUTH.route("/login")
+def login():
+    state = str(uuid.uuid4())
+    session["state"] = state
+    return redirect(current_app.auth.get_auth_url(state=state))
 
 
 @AUTH.route("/token")
@@ -48,17 +64,30 @@ def get_token():
             )
             g.db_session.add(new_user)
             g.db_session.flush()
+
+            user = new_user
         else:
             for key, value in current_user.items():
                 setattr(existing_user, key, value)
 
-        # This is authed, so could return to /dashboard or something
-        return redirect(url_for("tools.index"))
+            user = existing_user
+
+        resp = redirect("/")
+
+        access_token = create_access_token(identity=user)
+        refresh_token = create_refresh_token(identity=user)
+
+        set_access_cookies(resp, access_token)
+        set_refresh_cookies(resp, refresh_token)
+
+        return resp
 
     raise AuthException("No code provided", code=400)
 
 
 @AUTH.route("/logout")
 def logout():
+    resp = redirect(current_app.auth.get_logout_url())
+    unset_jwt_cookies(resp)
     session.clear()
-    return redirect(current_app.auth.get_logout_url())
+    return resp

@@ -7,7 +7,7 @@ from tools.config import DevelopmentConfig, ProductionConfig
 from tools.routes import blueprints
 from tools.errors import AppException
 from tools.database import Session
-from tools.auth import AuthHandler
+from tools.auth import AuthHandler, JWT
 from tools.config import AZURE_ENABLED
 
 """
@@ -19,11 +19,13 @@ logger = logging.getLogger(__name__)
 
 class Application(Flask):
     auth = AuthHandler()
+    jwt = JWT
 
 
 def make_app(config):
     app = Application(__name__)
     app.config.from_object(config)
+    app.jwt.init_app(app)
 
     # Error handling
     @app.errorhandler(AppException)

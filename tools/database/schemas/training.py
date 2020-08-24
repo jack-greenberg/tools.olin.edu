@@ -1,8 +1,9 @@
-from flask import g
+from flask import g, request
 from graphene import Mutation, ObjectType, Field, List, Int, String
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
 from ..models import Training as TrainingModel, Tool as ToolModel
+from tools.utils import Role
 
 """
 Schemas

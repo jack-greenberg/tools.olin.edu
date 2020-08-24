@@ -2,6 +2,8 @@ from flask import g
 from graphene import Field, Int, Mutation, ObjectType, String, List
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
+from tools.utils import Role
+from tools.auth import scoped
 from ..models import Tool as ToolModel, ToolCategory as ToolCategoryModel
 
 """
@@ -59,6 +61,7 @@ class AddTool(Mutation):
     Output = Tool
 
     @staticmethod
+    @scoped(Role.ADMIN)
     def mutate(self, info, **kwargs):
         # TODO: name to lower case and underscores for commas,
         # both for tool and category
