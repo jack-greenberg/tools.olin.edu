@@ -1,6 +1,9 @@
+import pytest
 import json
 
 from tests.conftest import mock_user, mock_tool, mock_training
+from tools.routes.graphql import error_formatter
+from tools.errors import AppException
 
 
 def test_user_trainings(app, client, db_session, current_user):
@@ -123,3 +126,28 @@ def test_update_user_training_status(client, app, db_session, current_user):
         data = json.loads(response.data)
         assert "errors" not in data
         assert data["data"] == {"updateTrainingStatus": {"status": "COMPLETE"}}
+
+
+def test_api_errors(app, client, db_session, current_user):
+    mock_user(1, db_session)
+
+    with app.test_request_context():
+        response = client.post(
+            "/api/",
+            data={
+                "query": """
+                    this will fail
+                """
+            },
+        )
+    assert response.status_code == 500
+
+
+def test_error_formatter():
+    err = AppException("Oh no :(", code=419)
+    err.original_error = AppException("Something else", code=500)
+
+    with pytest.raises(AppException) as raised:
+        error_formatter(err)
+
+    assert raised.value.message == "Something else"

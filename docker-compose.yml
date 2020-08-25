@@ -16,7 +16,7 @@ services:
     ports:
       - "8000:5000"
     volumes:
-      - ./tools:/tools/tools
+      - .:/tools
     networks:
       - tools-net
 

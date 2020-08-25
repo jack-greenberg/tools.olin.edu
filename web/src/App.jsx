@@ -9,13 +9,14 @@ const getCurrentUser = async (set) => {
       "query": `
         query getCurrentUser {
           me {
-            user_id
-            display_name
+            userId
+            displayName
+            firstName
           }
         }
       `
     })
-    set(response);
+    set(response.data);
   } catch (error) {
     set(error.response);
 
@@ -45,14 +46,20 @@ const App = () => {
   if (response.status === 401) {
     return (
       <div>
-        <a href={response.data.login_url}>Click here to log in.</a>
+        <a href="/auth/login">Click here to log in.</a>
       </div>
     )
   }
 
   return (
-    <Router />
+    <div>
+      <p>Welcome {response.data.me.firstName}</p>
+    </div>
   )
+
+  // return (
+  //   <Router />
+  // )
 }
 
 export default App;

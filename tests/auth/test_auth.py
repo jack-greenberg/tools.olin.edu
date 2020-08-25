@@ -13,15 +13,13 @@ from tools.database.models import User
 from tests.conftest import mock_user
 
 
-def test_unauthed_homepage(app, client):
-    """
-    Test that the homepage includes a `Click to log in` link
-    """
+def test_unauthed(app, client):
     with app.test_request_context():
-        response = client.get("/")
-        assert response.status_code == 200
-        body = response.data
-        assert b"Click to log in" in body
+        response = client.post("/api/")
+        assert response.status_code == 401
+        body = json.loads(response.data)
+        assert body["code"] == 401
+        assert body["message"] == "This endpoint requires a login."
 
 
 def test_auth_client(app):
@@ -29,7 +27,7 @@ def test_auth_client(app):
     assert isinstance(app.auth.client, ConfidentialClientApplication)
 
     with app.test_request_context():
-        assert app.auth.get_logout_url().endswith(url_for("tools.index"))
+        assert app.auth.get_logout_url().endswith(url_for("index"))
 
 
 @responses.activate
@@ -61,9 +59,17 @@ def test_auth_process(app, client, db_session):
         with patch.object(
             AuthHandler, "get_auth_url", return_value="https://example.com"
         ) as mock_method:
-            response = client.get("/")
+            response = client.post("/api/")
             assert mock_method.called
-            assert response.data == b"<a href='https://example.com'>Click to log in</a>"
+            body = json.loads(response.data)
+            assert body["login_url"] == "https://example.com"
+
+            # `with client` allows you to check the session
+            with client:
+                response = client.get("/auth/login")
+                assert session.get("state")
+                assert response.status_code == 302
+                assert response.headers.get("Location") == "https://example.com"
 
         # Get a token, mock out the acquire_token thing
         token = uuid.uuid4()
@@ -97,9 +103,28 @@ def test_auth_process(app, client, db_session):
                     session["user"].get("oid") == "ac19540c-210b-ff37-asdf-10293abfe9se"
                 )
 
-                # Now the homepage displays a custom message
-                response = client.get("/")
-                assert b"Welcome Ada" in response.data
+                cookies = ", ".join(response.headers.get_all("Set-Cookie"))
+                assert "access_token_cookie" in cookies
+                assert "refresh_token_cookie" in cookies
+                assert "Secure" in cookies
+                assert "HttpOnly" in cookies
+
+                # Now authenticated
+                response = client.post(
+                    "/api/",
+                    data={
+                        "query": """
+                        query whoami {
+                            me {
+                                firstName
+                            }
+                        }
+                    """
+                    },
+                )
+                assert {"data": {"me": {"firstName": "Ada"}}} == json.loads(
+                    response.data
+                )
 
                 # Logout
                 response = client.get("/auth/logout")

@@ -22,8 +22,9 @@ def test_tool_queries(app, client, db_session, current_user):
                 }
             """
             },
-        ).get_json()
+        )
 
+        assert resp.status_code == 200
         assert {
             "data": {
                 "addTool": {
@@ -32,10 +33,10 @@ def test_tool_queries(app, client, db_session, current_user):
                     "category": {"name": "MetalWorking"},
                 }
             }
-        } == resp
+        } == resp.get_json()
 
-        tool_id = resp["data"]["addTool"].get("id")
-        tool_category = resp["data"]["addTool"].get("category")["name"]
+        tool_id = resp.get_json()["data"]["addTool"].get("id")
+        tool_category = resp.get_json()["data"]["addTool"].get("category")["name"]
         assert db_session.query(Tool).filter_by(id=tool_id).first().name == "Lathe"
         assert (
             db_session.query(ToolCategory).filter_by(name=tool_category).first().name

@@ -68,18 +68,9 @@ class AuthHandler(object):
         return (
             AZURE_AUTHORITY
             + "/oauth2/v2.0/logout?post_logout_redirect_uri=http://localhost:8000"
-            + url_for("tools.index")
+            + "/"
         )
 
     @staticmethod
     def get_auth_headers():
         return {"Authorization": "Bearer " + session["access_token"]}
-
-
-#  def authed(f):
-#      def wrapped(*args, **kwargs):
-#          if not session.get("user"):
-#              raise AuthException("User not logged in")
-#          return f(*args, **kwargs)
-#
-#      return wrapped
