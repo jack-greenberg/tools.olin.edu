@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./App.scss";
 import Router from "./Router";
 import axios from "axios";
+import { Header } from "./components";
 
 const getCurrentUser = async (set) => {
   try {
@@ -53,13 +54,11 @@ const App = () => {
 
   return (
     <div>
+      <Header />
       <p>Welcome {response.data.me.firstName}</p>
+      <Router />
     </div>
   )
-
-  // return (
-  //   <Router />
-  // )
 }
 
 export default App;
