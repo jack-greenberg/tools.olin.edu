@@ -1,1 +1,7 @@
-// export const GET_CURRENT_USER = "GET_CURRENT_USER";
+const UserActions = {
+  LOGIN_REQUEST: "LOGIN_REQUEST",
+  LOGIN_SUCCESS: "LOGIN_SUCCESS",
+  LOGIN_FAILURE: "LOGIN_FAILURE",
+}
+
+export default UserActions;
