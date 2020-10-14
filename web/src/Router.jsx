@@ -2,12 +2,14 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Home from "./pages/Home";
+import Tools from "./pages/Tools";
 
 const AppRouter = () => {
   return (
     <Router>
       <Switch>
         <Route exact path="/" render={() => <Home />} />
+        <Route path="/tools" render={() => <Tools />} />
         <Route render={() => (<div>404 :(</div>)} />
       </Switch>
     </Router>

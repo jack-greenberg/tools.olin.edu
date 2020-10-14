@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import Router from "./Router";
 import store from "./Reducer";
 import { Header } from "./components";
-import { logout } from "./auth";
+import { login, logout } from "./auth";
 import "./App.scss";
 
 const status = {
@@ -27,7 +27,6 @@ const WHOAMI = gql`
 const App = () => {
   const { loading, error, data } = useQuery(WHOAMI);
 
-
   if (error) {
     var { statusCode } = error.networkError;
 
@@ -38,6 +37,8 @@ const App = () => {
       default:
         break;
     }
+  } else if (data) {
+    store.dispatch(login(data.me));
   }
 
   if (loading) {
@@ -49,7 +50,6 @@ const App = () => {
       <Provider store={store}>
         <Header />
         <Router />
-        {data}
       </Provider>
     </>
   )

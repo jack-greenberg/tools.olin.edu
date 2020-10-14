@@ -11,20 +11,13 @@ const Header = (props) => {
       {
         auth.isAuthenticated
         ? (
-          <a href="/auth/logout">Logout</a>
+          <div>
+            Welcome, {auth.user.firstName}! <a href="/auth/logout">Logout</a>
+          </div>
         ) : (
           <a href="/auth/login">Login</a>
         )
       }
-      <h2>List of tools:</h2>
-      <ul>
-        <li>
-          Lathe
-        </li>
-        <li>
-          Mill
-        </li>
-      </ul>
     </div>
   )
 }
