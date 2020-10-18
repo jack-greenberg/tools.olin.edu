@@ -11,7 +11,8 @@ ENV PIP_DISABLE_PIP_VERSION=on \
     POETRY_VIRTUALENVS_CREATE=false \
     POETRY_NO_INTERACTION=1
 
-RUN apt-get install --no-install-recommends --no-install-suggests -y \
+RUN apt-get update && apt-get install --no-install-recommends --no-install-suggests -y \
+    apt-transport-https \
     postgresql-client \
     libpq-dev
 
