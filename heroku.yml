@@ -1,0 +1,21 @@
+setup:
+  addons:
+    - plan: heroku-postgresql
+      as: DATABASE
+  config:
+      POSTGRES_DB: tools
+      POSTGRES_USER: tools
+      POSTGRES_PASSWORD: development
+      FLASK_SKIP_DOTENV: 1
+      AZURE_APPLICATION_ID: ${AZURE_APPLICATION_ID}
+      AZURE_TENANT_ID: ${AZURE_TENANT_ID}
+      AZURE_CLIENT_SECRET: ${AZURE_CLIENT_SECRET}
+
+build:
+  docker:
+    tools-backend: Dockerfile
+    tools-web: ./web/Dockerfile
+    tools-db: Dockerfile
+    tools-proxy: ./deployment/Dockerfile.nginx
+
+
