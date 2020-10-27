@@ -5,7 +5,6 @@ import { Provider } from "react-redux";
 
 import Router from "./Router";
 import store from "./Reducer";
-import { Header } from "./components";
 import { login, logout } from "./auth";
 import "./App.scss";
 
@@ -48,7 +47,6 @@ const App = () => {
   return (
     <>
       <Provider store={store}>
-        <Header />
         <Router />
       </Provider>
     </>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 
@@ -28,24 +29,26 @@ const Tools = () => {
   }
 
   if (error) {
-    // Handle error
+    // TODO: Implement <Error message={} code={} /> component
   }
 
-  const sorted = _.groupBy(data.tools,"category.name");
+  // Sort tools by their category name
+  const sorted = _.groupBy(data.tools, "category.name");
 
+  // Create tool lists (multiple ul > li)
   const toolList = Object.keys(sorted).map((category) => {
-    const tools = sorted[category];
-    const toolItems = tools.map(tool => {
+    const toolItems = sorted[category].map(tool => {
+      const shortName = tool.name.toLowerCase();
       return (
         <li data-id={tool.id} key={tool.id}>
-          {tool.name}
+          <Link to={"/tools/" + shortName}>{tool.name}</Link>
         </li>
       )
     })
 
     return (
       <div key={category}>
-        <h3>{category}</h3>
+        <h2>{category}</h2>
         <ul>
           {toolItems}
         </ul>
@@ -54,9 +57,12 @@ const Tools = () => {
   });
 
   return (
-    <div>
+    <>
+      <h1>Tools</h1>
+      <p>Click on a tool to visit the page. From there, you can
+        start a training.</p>
       {toolList}
-    </div>
+    </>
   )
 }
 
